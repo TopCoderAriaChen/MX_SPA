@@ -7,7 +7,7 @@ from .model import Campus
 
 api = Namespace("campus")
 
-@api.route("/")
+@api.route("")
 class CampusListApi(Resource): 
     def get(self):
         campus_list = list(Campus.objects())

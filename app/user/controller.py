@@ -9,7 +9,7 @@ from .schema import UserSchema
 
 auth_api: Namespace = Namespace("auth")
 
-@auth_api.route("/")
+@auth_api.route("")
 class UserAuthInfo(Resource):
     @jwt_required()
     def get(self):
