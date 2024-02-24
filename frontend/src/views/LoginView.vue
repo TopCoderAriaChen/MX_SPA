@@ -31,7 +31,8 @@ const disabled = computed(
 
 const handleClick = async () => {
   loading.value = true;
-  authStore.login(formValue.value.username, formValue.value.password);
+  await authStore.login(formValue.value.username, formValue.value.password);
+  loading.value = false;
 };
 </script>
 
