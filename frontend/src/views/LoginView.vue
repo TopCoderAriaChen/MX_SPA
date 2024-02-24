@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NSpace, NH1, NH5, NButton, NFormItem, NInput } from "naive-ui";
+import { NSpace, NH1, NH5, NButton, NFormItem, NInput, NA } from "naive-ui";
 import { ref } from "vue";
 
 interface LoginForm {
@@ -14,7 +14,6 @@ const formValue = ref<LoginForm>({
 });
 
 const handleClick = async () => {};
-
 </script>
 
 <template>
@@ -40,10 +39,13 @@ const handleClick = async () => {};
         </n-form-item>
       </n-form>
 
-      <n-button type="primary" tag="a" size="large" 
-      @click="handleClick">
-        Login
-      </n-button>
+      <n-space align="center" justify="space-between">
+        <n-a href="/forget"> Forget your password? </n-a>
+        <n-space>
+          <n-button tag="a" size="large" href="/register"> Register </n-button>
+          <n-button type="primary" tag="a" size="large" @click="handleClick">Login</n-button>
+        </n-space>
+      </n-space>
 
     </n-space>
   </div>
