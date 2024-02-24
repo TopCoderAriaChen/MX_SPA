@@ -1,6 +1,15 @@
 <script setup lang="ts">
-import { NSpace, NH1, NH5, NButton, NFormItem, NInput, NA } from "naive-ui";
-import { ref } from "vue";
+import {
+  NSpace,
+  NH1,
+  NH5,
+  NButton,
+  NForm,
+  NFormItem,
+  NInput,
+  NA,
+} from "naive-ui";
+import { computed, ref } from "vue";
 
 interface LoginForm {
   username: string;
@@ -9,11 +18,18 @@ interface LoginForm {
 
 const formRef = ref<LoginForm | null>(null);
 const formValue = ref<LoginForm>({
-  username: "admin",
-  password: "password"
+  username: "",
+  password: "",
 });
 
-const handleClick = async () => {};
+const loading = ref(false);
+const disabled = computed(
+  () => formValue.value.username === "" || formValue.value.password === ""
+);
+
+const handleClick = async () => {
+  loading.value = true;
+};
 </script>
 
 <template>
@@ -21,13 +37,12 @@ const handleClick = async () => {};
     <n-space vertical class="login-card">
       <n-h1>Welcome to Shangxue Online</n-h1>
       <n-h5>Please login to continue</n-h5>
-
       <n-form ref="formRef" :model="formValue">
         <n-form-item path="username" label="Username">
           <n-input
             type="text"
             placeholder="Please Input"
-            :value="formValue.username"
+            v-model:value="formValue.username"
           />
         </n-form-item>
         <n-form-item path="password" label="Password">
@@ -38,15 +53,22 @@ const handleClick = async () => {};
           />
         </n-form-item>
       </n-form>
-
       <n-space align="center" justify="space-between">
-        <n-a href="/forget"> Forget your password? </n-a>
+        <n-a href="/forget">Forget your password?</n-a>
         <n-space>
-          <n-button tag="a" size="large" href="/register"> Register </n-button>
-          <n-button type="primary" tag="a" size="large" @click="handleClick">Login</n-button>
+          <n-button tag="a" size="large" href="/register">Register</n-button>
+          <n-button
+            type="primary"
+            tag="a"
+            size="large"
+            :disabled="disabled"
+            :loading="loading"
+            @click="handleClick"
+          >
+            Login
+          </n-button>
         </n-space>
       </n-space>
-
     </n-space>
   </div>
 </template>
