@@ -6,11 +6,15 @@ interface LoginForm {
   username: string;
   password: string;
 }
+
 const formRef = ref<LoginForm | null>(null);
 const formValue = ref<LoginForm>({
   username: "admin",
   password: "password"
 });
+
+const handleClick = async () => {};
+
 </script>
 
 <template>
@@ -21,22 +25,26 @@ const formValue = ref<LoginForm>({
 
       <n-form ref="formRef" :model="formValue">
         <n-form-item path="username" label="Username">
-          <n-input 
-            type="text" 
+          <n-input
+            type="text"
             placeholder="Please Input"
             :value="formValue.username"
           />
         </n-form-item>
         <n-form-item path="password" label="Password">
-          <n-input 
-            type="password" 
+          <n-input
+            type="password"
             placeholder="Please Input"
             :value="formValue.password"
           />
         </n-form-item>
       </n-form>
 
-      <n-button type="primary" tag="a">Hello</n-button>
+      <n-button type="primary" tag="a" size="large" 
+      @click="handleClick">
+        Login
+      </n-button>
+
     </n-space>
   </div>
 </template>
