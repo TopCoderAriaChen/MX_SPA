@@ -25,7 +25,13 @@ export const useAuthStore = defineStore({
       localStorage.setItem(USER_INFO_PREFIX, JSON.stringify(user));
     },
     async reload() {
-        
-    }
-  }
+        const user = await getCurrentUser();
+        localStorage.setItem(USER_INFO_PREFIX, JSON.stringify(user));
+        this.userInfo = user;
+    },
+    async logout() {
+        localStorage.removeItem(USER_INFO_PREFIX);
+        this.userInfo = null;
+    },      
+  },
 });
