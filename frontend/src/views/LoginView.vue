@@ -7,9 +7,10 @@ import {
   NForm,
   NFormItem,
   NInput,
-  NA,
+  NA
 } from "naive-ui";
 import { computed, ref } from "vue";
+import { useAuthStore } from "@/stores/auth";
 
 interface LoginForm {
   username: string;
@@ -18,10 +19,11 @@ interface LoginForm {
 
 const formRef = ref<LoginForm | null>(null);
 const formValue = ref<LoginForm>({
-  username: "",
-  password: "",
+  username: "admin",
+  password: "password"
 });
 
+const authStore = useAuthStore();
 const loading = ref(false);
 const disabled = computed(
   () => formValue.value.username === "" || formValue.value.password === ""
@@ -29,13 +31,14 @@ const disabled = computed(
 
 const handleClick = async () => {
   loading.value = true;
+  authStore.login(formValue.value.username, formValue.value.password);
 };
 </script>
 
 <template>
   <div class="login">
     <n-space vertical class="login-card">
-      <n-h1>Welcome to Shangxue Online</n-h1>
+      <n-h1>Welcome to Moxue Online</n-h1>
       <n-h5>Please login to continue</n-h5>
       <n-form ref="formRef" :model="formValue">
         <n-form-item path="username" label="Username">
