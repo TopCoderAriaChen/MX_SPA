@@ -11,6 +11,7 @@ import {
 } from "naive-ui";
 import { computed, ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
 
 interface LoginForm {
   username: string;
@@ -23,6 +24,7 @@ const formValue = ref<LoginForm>({
   password: "password"
 });
 
+const router = useRouter();
 const authStore = useAuthStore();
 const loading = ref(false);
 const disabled = computed(
@@ -33,6 +35,7 @@ const handleClick = async () => {
   loading.value = true;
   await authStore.login(formValue.value.username, formValue.value.password);
   loading.value = false;
+  router.replace("/");
 };
 </script>
 
