@@ -34,7 +34,7 @@ const handleClick = async () => {};
           <n-input
             type="password"
             placeholder="Please Input"
-            :value="formValue.password"
+            v-model:value="formValue.password"
           />
         </n-form-item>
       </n-form>
