@@ -1,11 +1,12 @@
 import datetime
+from app.campus.model import Campus
 from flask_restx import Namespace, Resource
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, current_user
 
-from .model import User, check_password, get_hashed_password
-from .schema import UserSchema, UserListSchema
-from .service import user_service
+from .model import Student, User, check_password, get_hashed_password
+from .schema import StudentCreateSchema, StudentSchema, UserSchema, UserListSchema
+from .service import unauthorized_user_service, user_service
 from . import permission_required
 
 
@@ -48,4 +49,23 @@ class UsersApi(Resource):
     @permission_required("user_admin")
     def get(self):  
         return UserListSchema.from_orm(user_service().list_users())
-    
+
+
+students_api = Namespace("students")
+
+@students_api.route("")
+class StudentsApi(Resource):
+    def post(self):
+        request_data = request.json
+        if "campus" not in request_data:
+            return {"code": 400, "message": "Campus is not found in the payload"}, 400
+        request_data["campus"] = Campus.objects(id=request_data["campus"]).first_or_404(
+            "Campus not found"
+        )
+        student = StudentCreateSchema(**request_data)
+        
+        student = Student(**student.dict())
+        student = unauthorized_user_service().register_user(student)
+        return StudentSchema.from_orm(student),201 
+
+

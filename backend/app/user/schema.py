@@ -9,10 +9,24 @@ class UserSchema(MongoModel):
     username: str
     password: SecretStr
     username: str
+    display_name: str    
+    telephone: str
+    campus: PydanticObjectId
+    created_at: datetime   
+
+
+class StudentSchema(UserSchema):
+    wx: str = None
+    uni: str = None
+
+class StudentCreateSchema(MongoModel):
+    username: str
+    password: str
     display_name: str
     telephone: str
     campus: PydanticObjectId
-    created_at: datetime
+    wx: str
+    uni: str
 
 class UserListSchema(MongoListModel):
     __root__: List[UserSchema]

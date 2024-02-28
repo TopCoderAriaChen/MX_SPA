@@ -8,7 +8,7 @@ from flask_restx import Api
 from flask_mongoengine import MongoEngine
 
 from app.campus.controller import api as campus_api
-from app.user.controller import auth_api, users_api
+from app.user.controller import auth_api, users_api, students_api
 from app.user import register_user_lookup
 from app.core.converter import CustomEncoder
 
@@ -22,6 +22,7 @@ api = Api(api_bp)
 api.add_namespace(campus_api)
 api.add_namespace(auth_api)
 api.add_namespace(users_api)
+api.add_namespace(students_api)
 
 def create_app():
     app = Flask(os.getenv("FLASK_APP_NAME"))
