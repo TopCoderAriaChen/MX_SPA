@@ -1,6 +1,7 @@
+from .model import User
 import functools
 from flask_jwt_extended import current_user, jwt_required
-from .model import User
+from ..exceptions.permission_exceptions import PermissionDenied
 
 def register_user_lookup(jwt):
     def user_lookup_callback(_jwt_header, jwt_data):
@@ -19,13 +20,7 @@ def permission_required(permission=None):
                 if permission is None or permission in current_user.permissions:
                     return func(*arg, **kwargs)
                 else:
-                    return {
-                        "code": 403,
-                        "message": f"Permission '{permission}' is required",
-                    }, 403
-            return {
-                "code": 403,
-                "message": "Permission denied",
-            }, 403
+                    raise PermissionDenied(f"Permission '{permission}' is required")
+            raise PermissionDenied()
         return decorator
     return wrapper

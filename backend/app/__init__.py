@@ -1,4 +1,5 @@
 import os
+from app.exceptions import register_resources_exception_handler
 from dotenv import load_dotenv
 from flask import Flask, Blueprint
 from flask_cors import CORS
@@ -44,5 +45,7 @@ def create_app():
 
 
     app.register_blueprint(api_bp)
-    
+    register_resources_exception_handler(api)
+
+
     return app
