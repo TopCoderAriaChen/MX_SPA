@@ -14,19 +14,30 @@ class UserSchema(MongoModel):
     campus: PydanticObjectId
     created_at: datetime   
 
-
-class StudentSchema(UserSchema):
-    wx: str = None
-    uni: str = None
-
-class StudentCreateSchema(MongoModel):
+class UserCreateSchema(MongoModel):
     username: str
     password: str
     display_name: str
     telephone: str
     campus: PydanticObjectId
+
+
+class StudentSchema(UserCreateSchema):
+    wx: str = None
+    uni: str = None
+
+class StudentCreateSchema(MongoModel):
     wx: str
     uni: str
 
+
+class AdminSchema(UserSchema):
+    permissions: List[str]
+
+class AdminCreateSchema(UserCreateSchema):
+    permissions: List[str]
+
+ 
 class UserListSchema(MongoListModel):
     __root__: List[UserSchema]
+
