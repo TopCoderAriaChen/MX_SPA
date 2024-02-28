@@ -1,22 +1,18 @@
-# Import the create_app function and the Campus class
 from app import create_app
 from app.campus.model import Campus
 
 from app.user.model import Admin, Student, Teacher, get_hashed_password
 
-# Create an instance of the Flask application
 print("Loading...")
 create_app()
 
-# Delete any existing objects in the Campus collection
 print("Configuring database")
 Campus.objects().delete()
 
-# Create and save a new Campus object with the name unimelb
 unimelb_campus = Campus(name="unimelb")
 unimelb_campus.save()
 
-
+# Test samples
 admin = Admin(
     username = "admin",
     display_name = "Admin",
