@@ -4,7 +4,8 @@ from flask import request, jsonify
 from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, current_user
 
 from .model import User, check_password, get_hashed_password
-from .schema import UserSchema
+from .schema import UserSchema, UserListSchema
+from app.user.service import user_service
 
 
 auth_api: Namespace = Namespace("auth")
@@ -36,3 +37,12 @@ class Login(Resource):
         response =  jsonify({"access_token": jwt_token})
         set_access_cookies(response, jwt_token)
         return response
+
+
+users_api = Namespace("users")
+
+@users_api.route("")
+class UsersApi(Resource):
+    @jwt_required()
+    def get(self):  
+        return UserListSchema.from_orm(user_service().list_users())

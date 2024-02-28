@@ -1,6 +1,8 @@
-from app.core.types import MongoModel, PydanticObjectId
+from app.core.types import MongoListModel, MongoModel, PydanticObjectId
+from typing import List 
 from pydantic import SecretStr
 from datetime import datetime
+
 
 class UserSchema(MongoModel):
     id: PydanticObjectId
@@ -12,3 +14,5 @@ class UserSchema(MongoModel):
     campus: PydanticObjectId
     created_at: datetime
 
+class UserListSchema(MongoListModel):
+    __root__: List[UserSchema]

@@ -22,7 +22,7 @@ class Correlation:
         elapsed = datetime.utcnow() - self.timestamp
         return round(elapsed.microseconds / 1000 / 1000, 3)
     
-class CorrelationLoggerDecorator:
+class CorrelationLogger:
     def __init__(self, logger, correlation):
         self.logger = logger
         self.base = correlation
@@ -44,7 +44,7 @@ class CorrelationLoggerDecorator:
         self.logger.debug(message, extra=self._decorate(self.base, extra))
 
     def getChild(self, name):
-        return CorrelationLoggerDecorator(self.logger.getChild(name), self.base)
+        return CorrelationLogger(self.logger.getChild(name), self.base)
 
 
 def config_log(app: Flask):
@@ -64,7 +64,7 @@ def config_log(app: Flask):
     @app.before_request
     def before_request():
         request.correlation = Correlation()
-        request.logger = CorrelationLoggerDecorator(
+        request.logger = CorrelationLogger(
             app.logger, request.correlation.to_dict()
         )
         extra = {
