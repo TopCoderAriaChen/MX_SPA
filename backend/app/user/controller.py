@@ -5,7 +5,9 @@ from flask_jwt_extended import create_access_token, set_access_cookies, jwt_requ
 
 from .model import User, check_password, get_hashed_password
 from .schema import UserSchema, UserListSchema
-from app.user.service import user_service
+from .service import user_service
+from . import permission_required
+
 
 
 auth_api: Namespace = Namespace("auth")
@@ -42,7 +44,8 @@ class Login(Resource):
 users_api = Namespace("users")
 
 @users_api.route("")
-class UsersApi(Resource):
-    @jwt_required()
+class UsersApi(Resource): 
+    @permission_required("user_admin")
     def get(self):  
         return UserListSchema.from_orm(user_service().list_users())
+    

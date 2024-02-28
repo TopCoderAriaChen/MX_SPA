@@ -18,11 +18,20 @@ admin = Admin(
     display_name = "Admin",
     password = get_hashed_password("password"),
     telephone = "123",
-    permissions = ["sys_owner", "campus_admin", "course_admin"],
+    permissions = ["sys_owner", "campus_admin", "course_admin", "user_admin"],
     campus = unimelb_campus,
 )
 admin.save()
 
+support = Admin(
+    username = "support",
+    display_name = "Support A",
+    password = get_hashed_password("password"),
+    telephone = "123",
+    permissions = ["course_admin"],
+    campus = unimelb_campus,
+)
+support.save()
 
 student = Student(
     username = "student",
