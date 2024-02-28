@@ -17,7 +17,11 @@ class Correlation:
             "correlationId":str(self.id),
             "correlationTimestamp":self.timestamp.isoformat(),
         }
-
+    
+    def get_duration_in_seconds(self):
+        elapsed = datetime.utcnow() - self.timestamp
+        return round(elapsed.microseconds / 1000 / 1000, 3)
+    
 class CorrelationLoggerDecorator:
     def __init__(self, logger, correlation):
         self.logger = logger
@@ -71,5 +75,16 @@ def config_log(app: Flask):
         }
         request.logger.info("request", extra)  
     
-    
+    @app.after_request
+    def after_request(response):
+        extra = {
+            "x-request-id": request.headers.get("x-request-id"),
+            "method": request.method,
+            "path": request.path,
+            "statusCode": response.status_code,
+            "duration": request.correlation.get_duration_in_seconds(),
+        }
+        request.logger.info("response", extra)
+        return response
+
     return app
