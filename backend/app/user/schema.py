@@ -22,11 +22,11 @@ class UserCreateSchema(MongoModel):
     campus: PydanticObjectId
 
 
-class StudentSchema(UserCreateSchema):
+class StudentSchema(UserSchema):
     wx: str = None
     uni: str = None
 
-class StudentCreateSchema(MongoModel):
+class StudentCreateSchema(UserCreateSchema):
     wx: str
     uni: str
 
@@ -38,6 +38,13 @@ class AdminCreateSchema(UserCreateSchema):
     permissions: List[str]
 
  
+class TeacherSchema(UserSchema):
+    abn: str = None
+
+class TeacherCreateSchema(UserCreateSchema):
+    abn: str = None
+
+
 class UserListSchema(MongoListModel):
     __root__: List[UserSchema]
 
