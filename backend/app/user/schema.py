@@ -28,7 +28,7 @@ class StudentSchema(UserSchema):
 
 class StudentCreateSchema(UserCreateSchema):
     wx: str
-    uni: str
+    uni: str 
 
 
 class AdminSchema(UserSchema):

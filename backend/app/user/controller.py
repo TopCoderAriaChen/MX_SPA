@@ -45,15 +45,16 @@ class Login(Resource):
 users_api = Namespace("users")
 
 @users_api.route("")
-class UsersApi(Resource): 
+class UsersApi(Resource):
     @permission_required("user_admin")
-    def get(self):  
-        return UserListSchema.from_orm(user_service().list_users())
+    def get(self):
+        user_type = request.args.get("type", None)
+        return UserListSchema.from_orm(user_service().list_users(user_type))
 
 
 students_api = Namespace("students")
 
-@students_api.route("")
+@students_api.route("")  
 class StudentsApi(Resource):
     def post(self):
         request_data = request.json
