@@ -38,7 +38,7 @@ class StudentSchema(UserSchema):
     wx: str = None
     uni: str = None
 
-class StudentCreateSchema(UserCreateSchema):
+class StudentCreateSchema(UserCreateSchema): 
     wx: str
     uni: str 
 

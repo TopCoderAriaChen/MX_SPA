@@ -17,7 +17,7 @@ auth_api: Namespace = Namespace("auth")
 class UserAuthInfo(Resource):
     @jwt_required()
     def get(self):
-        return UserSchema.from_orm(current_user)
+        return current_user.to_dict()
 
 
 

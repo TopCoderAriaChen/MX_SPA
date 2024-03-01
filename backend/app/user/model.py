@@ -1,5 +1,6 @@
 import base64
 import hashlib
+from app.user.schema import AdminSchema, StudentSchema, TeacherSchema, UserSchema
 import bcrypt
 from datetime import datetime
 
@@ -19,6 +20,7 @@ def check_password(plain_text_password, hashed_password):
         hashed_password.encode("utf-8"),
     )
 
+
 class User(Document):
     username = StringField(required=True, unique=True, max_length=36)
     password = StringField(required=True)
@@ -31,12 +33,27 @@ class User(Document):
         "indexes": ["username", "campus"],
     }
 
+    def to_dict(self):
+        return UserSchema.from_orm(self).dict()
+
+
 class Student(User):
     wx = StringField()
     uni = StringField()
 
+    def to_dict(self):
+        return StudentSchema.from_orm(self).dict()
+
+
 class Admin(User):
     permissions = ListField(StringField(), required=True, default=[])
 
+    def to_dict(self):
+        return AdminSchema.from_orm(self).dict()
+
+
 class Teacher(User):
     abn = StringField(max_length=20)
+
+    def to_dict(self):
+        return TeacherSchema.from_orm(self).dict()
