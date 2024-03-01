@@ -5,7 +5,7 @@ from flask import request, jsonify
 from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, current_user
 
 from .model import Admin, Student, Teacher, User, check_password, get_hashed_password
-from .schema import AdminCreateSchema, AdminSchema, StudentCreateSchema, StudentSchema, TeacherCreateSchema, TeacherSchema, UserSchema, UserListSchema
+from .schema import AdminCreateSchema, AdminListSchema, AdminSchema, StudentCreateSchema, StudentListSchema, StudentSchema, TeacherCreateSchema, TeacherListSchema, TeacherSchema, UserSchema, UserListSchema
 from .service import unauthorized_user_service, user_service
 from . import permission_required
 
@@ -52,10 +52,16 @@ class UsersApi(Resource):
         campus = request.args.get("campus", None)
         if campus is not None:
             campus = Campus.objects(id=campus).first_or_404("Campus not found")
-        return UserListSchema.from_orm(
-            user_service().list_users(user_type=user_type, campus=campus)
-        )
 
+        user_list = user_service().list_users(user_type=user_type, campus=campus)  
+        if user_type == "admin":
+            return AdminListSchema.from_orm(user_list)
+        if user_type == "teacher":
+            return TeacherListSchema.from_orm(user_list)
+        if user_type == "student":
+            return StudentListSchema.from_orm(user_list)
+        else:
+            return UserListSchema.from_orm(user_list)
 
 
 students_api = Namespace("students")

@@ -1,8 +1,9 @@
-from app.core.types import MongoListModel, MongoModel, PydanticObjectId
-from typing import List 
-from pydantic import SecretStr
 from datetime import datetime
+from typing import List 
 
+from pydantic import SecretStr, validator
+
+from app.core.types import MongoListModel, MongoModel, PydanticObjectId
 
 class UserSchema(MongoModel):
     id: PydanticObjectId
@@ -12,7 +13,18 @@ class UserSchema(MongoModel):
     display_name: str    
     telephone: str
     campus: PydanticObjectId
-    created_at: datetime   
+    created_at: datetime  
+    user_type: str
+
+    @validator("user_type")
+    def extract_user_type(cls, v):
+        return v.split(".")[-1].lower()
+
+    class Config:
+        orm_mode = True
+        fields = {"user_type": "_cls"}
+
+
 
 class UserCreateSchema(MongoModel):
     username: str
@@ -48,3 +60,11 @@ class TeacherCreateSchema(UserCreateSchema):
 class UserListSchema(MongoListModel):
     __root__: List[UserSchema]
 
+class AdminListSchema(MongoListModel):
+    __root__: List[AdminSchema]
+
+class StudentListSchema(MongoListModel):
+    __root__: List[StudentSchema]
+
+class TeacherListSchema(MongoListModel):
+    __root__: List[TeacherSchema]
