@@ -49,7 +49,13 @@ class UsersApi(Resource):
     @permission_required("user_admin")
     def get(self):
         user_type = request.args.get("type", None)
-        return UserListSchema.from_orm(user_service().list_users(user_type))
+        campus = request.args.get("campus", None)
+        if campus is not None:
+            campus = Campus.objects(id=campus).first_or_404("Campus not found")
+        return UserListSchema.from_orm(
+            user_service().list_users(user_type=user_type, campus=campus)
+        )
+
 
 
 students_api = Namespace("students")

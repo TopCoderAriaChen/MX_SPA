@@ -11,12 +11,15 @@ class UserService(BaseService):
     def __init__(self, user):
         super().__init__(UserService.__name__, user)
     
-    def list_users(self, user_type: str = None) -> List[User]:
+    def list_users(self, user_type = None, campus = None) -> List[User]:
         self.logger.info("Fetching users")
-        if user_type is None:
-            return list(User.objects())
-        else:
-            return list(User.objects(_cls="User." + user_type.lower().capitalize()))
+        querys = {}
+        if user_type is not None:
+            querys["_cls"] = "User." + user_type.lower().capitalize()
+        if campus is not None:
+            querys["campus"] = campus
+        return list(User.objects(**querys))
+
     
     def register_user(self, user: User):
         try:
