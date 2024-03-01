@@ -13,5 +13,5 @@ def register_resources_exception_handler(api):
     def handle_default_http_exception(e: HTTPException):
         return {
             "code": e.code,
-            "message": e.message is not None and e.message or e.description,
-        }
+            "message": getattr(e, "description", str(e)),
+        }, e.code
