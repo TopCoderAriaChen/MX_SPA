@@ -64,6 +64,14 @@ class UsersApi(Resource):
             return UserListSchema.from_orm(user_list)
 
 
+@users_api.route("/<username>")
+class UserApi(Resource):
+    @jwt_required()
+    def get(self, username):
+        return UserSchema.from_orm(user_service().get_user(username=username))
+
+
+
 students_api = Namespace("students")
 
 @students_api.route("")  

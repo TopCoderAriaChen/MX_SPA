@@ -1,5 +1,6 @@
 from typing import List
 from app.exceptions.database_exceptions import DuplicateRecord
+from app.exceptions.permission_exceptions import PermissionDenied
 
 from flask_jwt_extended import get_current_user
 
@@ -20,7 +21,6 @@ class UserService(BaseService):
             querys["campus"] = campus
         return list(User.objects(**querys))
 
-    
     def register_user(self, user: User):
         try:
             user.password = get_hashed_password(user.password)
@@ -29,6 +29,14 @@ class UserService(BaseService):
         except NotUniqueError:
             raise DuplicateRecord("User already exists")
 
+    def get_user(self, username): 
+        if self.user.username == username or (
+            self.user._cls == "User.Admin" and "user_admin" in self.user.permissions
+        ):
+            return User.objects(username=username).first_or_404("User not exists")
+        else:
+            raise PermissionDenied()
+        
 
 def user_service():
     return UserService(get_current_user())

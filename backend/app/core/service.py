@@ -1,5 +1,6 @@
 from flask import request
 from app.log import CorrelationLogger
+from app.user.model import User
 
 class BaseService:
     def __init__(self, service_name, user=None, parent_logger=None) -> None:
@@ -10,4 +11,7 @@ class BaseService:
         
         if user is not None:
             self.logger.base = {**self.logger.base, "user": user.id}
+            self.user = user
+        else:
+            self.user = None
         
