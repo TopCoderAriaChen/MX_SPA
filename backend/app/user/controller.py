@@ -68,7 +68,12 @@ class UsersApi(Resource):
 class UserApi(Resource):
     @jwt_required()
     def get(self, username):
-        return UserSchema.from_orm(user_service().get_user(username=username))
+        return UserSchema.from_orm(user_service().get_user(username=username)), 200
+    
+    @jwt_required()
+    def delete(self, username):
+        user_service().delete_user(username=username)
+        return
 
 
 
