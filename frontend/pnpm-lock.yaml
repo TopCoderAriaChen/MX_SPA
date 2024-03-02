@@ -8,12 +8,18 @@ dependencies:
   '@vueuse/core':
     specifier: ^10.9.0
     version: 10.9.0(vue@3.4.19)
+  '@vueuse/integrations':
+    specifier: ^10.9.0
+    version: 10.9.0(axios@1.6.7)(universal-cookie@7.1.0)(vue@3.4.19)
   axios:
     specifier: ^1.6.7
     version: 1.6.7
   pinia:
     specifier: ^2.0.28
     version: 2.1.7(typescript@4.7.4)(vue@3.4.19)
+  universal-cookie:
+    specifier: ^7.1.0
+    version: 7.1.0
   vue:
     specifier: ^3.2.45
     version: 3.4.19(typescript@4.7.4)
@@ -745,6 +751,10 @@ packages:
     resolution: {integrity: sha512-RbhOOTCNoCrbfkRyoXODZp75MlpiHMgbE5MEBZAnnnLyQNgrigEj4p0lzsMDyc1zVsJDLrivB58tgg3emX0eEA==}
     dev: true
 
+  /@types/cookie@0.6.0:
+    resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
+    dev: false
+
   /@types/json-schema@7.0.15:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
     dev: true
@@ -1142,6 +1152,57 @@ packages:
       - vue
     dev: false
 
+  /@vueuse/integrations@10.9.0(axios@1.6.7)(universal-cookie@7.1.0)(vue@3.4.19):
+    resolution: {integrity: sha512-acK+A01AYdWSvL4BZmCoJAcyHJ6EqhmkQEXbQLwev1MY7NBnS+hcEMx/BzVoR9zKI+UqEPMD9u6PsyAuiTRT4Q==}
+    peerDependencies:
+      async-validator: '*'
+      axios: '*'
+      change-case: '*'
+      drauu: '*'
+      focus-trap: '*'
+      fuse.js: '*'
+      idb-keyval: '*'
+      jwt-decode: '*'
+      nprogress: '*'
+      qrcode: '*'
+      sortablejs: '*'
+      universal-cookie: '*'
+    peerDependenciesMeta:
+      async-validator:
+        optional: true
+      axios:
+        optional: true
+      change-case:
+        optional: true
+      drauu:
+        optional: true
+      focus-trap:
+        optional: true
+      fuse.js:
+        optional: true
+      idb-keyval:
+        optional: true
+      jwt-decode:
+        optional: true
+      nprogress:
+        optional: true
+      qrcode:
+        optional: true
+      sortablejs:
+        optional: true
+      universal-cookie:
+        optional: true
+    dependencies:
+      '@vueuse/core': 10.9.0(vue@3.4.19)
+      '@vueuse/shared': 10.9.0(vue@3.4.19)
+      axios: 1.6.7
+      universal-cookie: 7.1.0
+      vue-demi: 0.14.7(vue@3.4.19)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
+
   /@vueuse/metadata@10.9.0:
     resolution: {integrity: sha512-iddNbg3yZM0X7qFY2sAotomgdHK7YJ6sKUvQqbvwnf7TmaVPxS4EJydcNsVejNdS8iWCtDk+fYXr7E32nyTnGA==}
     dev: false
@@ -1445,6 +1506,11 @@ packages:
   /convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
     dev: true
+
+  /cookie@0.6.0:
+    resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
+    engines: {node: '>= 0.6'}
+    dev: false
 
   /copy-anything@2.0.6:
     resolution: {integrity: sha512-1j20GZTsvKNkc4BY3NpMOM8tt///wY3FpIzozTOFO2ffuZcV61nojHXVKIy3WM+7ADCy5FVhdZYHYDdgTU0yJw==}
@@ -3521,6 +3587,13 @@ packages:
   /undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
     dev: true
+
+  /universal-cookie@7.1.0:
+    resolution: {integrity: sha512-LCLHwP0whxTqkBYMptW1dzNS0xxIVJmU6c51N5CfPNheVxuJW7fVxPa6MUGX7boUSyOlpMveBO96hMs5Gee6Fg==}
+    dependencies:
+      '@types/cookie': 0.6.0
+      cookie: 0.6.0
+    dev: false
 
   /update-browserslist-db@1.0.13(browserslist@4.23.0):
     resolution: {integrity: sha512-xebP81SNcPuNpPP3uzeW1NYXxI3rxyJzF3pD6sH4jE7o/IX+WtSpwnVU+qIsDPyk0d3hmFQ7mjqc6AtV604hbg==}

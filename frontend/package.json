@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "@vueuse/core": "^10.9.0",
+    "@vueuse/integrations": "^10.9.0",
     "axios": "^1.6.7",
     "pinia": "^2.0.28",
+    "universal-cookie": "^7.1.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },

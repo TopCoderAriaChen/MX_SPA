@@ -1,4 +1,12 @@
-import axios from "axios";
+import axios, { type AxiosRequestHeaders } from "axios";
+import { useCookies } from "@vueuse/integrations/useCookies";
+
+interface Headers extends AxiosRequestHeaders {
+  "X-CSRF-TOKEN": string;
+}
+
+const CSRF_ACCESS_TOKEN = "csrf_access_token";
+const cookies = useCookies([CSRF_ACCESS_TOKEN]);
 
 const axiosInstance = axios.create({
   timeout: 5000,
@@ -6,7 +14,13 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  console.withCredentials = true;
-  return config
+  config.withCredentials = true;
+  const token = cookies.get<String>(CSRF_ACCESS_TOKEN);
+  config.headers = {
+    ...config.headers,
+    "X-CSRF-TOKEN": token,
+  } as Headers;
+  return config;
 });
+
 export default axiosInstance;
