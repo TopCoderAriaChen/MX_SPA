@@ -31,11 +31,14 @@ const disabled = computed(
   () => formValue.value.username === "" || formValue.value.password === ""
 );
 
-const handleClick = async () => {
-  loading.value = true;
-  await authStore.login(formValue.value.username, formValue.value.password);
-  loading.value = false;
-  router.replace("/");
+const handleLogin = async () => {
+  try {
+    loading.value = true;
+    await authStore.login(formValue.value.username, formValue.value.password);
+    router.replace("/");
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 
@@ -70,7 +73,7 @@ const handleClick = async () => {
             size="large"
             :disabled="disabled"
             :loading="loading"
-            @click="handleClick"
+            @click="handleLogin"
           >
             Login
           </n-button>
