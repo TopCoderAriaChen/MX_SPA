@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { NIcon, NLayoutSider, NMenu } from 'naive-ui';
-import { ref, h } from 'vue';
-import { useRoute, RouterLink } from 'vue-router';
-import { Book, Home } from '@vicons/ionicons5';
+import { NIcon, NLayoutSider, NMenu, NA } from "naive-ui";
+import { ref, h } from "vue";
+import { useRoute, RouterLink } from "vue-router";
+import { Book, Home } from "@vicons/ionicons5";
 
 interface MenuItem {
   label: string;
@@ -13,7 +13,7 @@ interface MenuItem {
 }
 
 const route = useRoute();
-const currentKey = ref('home');
+const currentKey = ref("home");
 const collapsed = ref(false);
 
 const menus: MenuItem[] = [
@@ -21,7 +21,7 @@ const menus: MenuItem[] = [
     label: "Home",
     key: "home",
     path: "/",
-    icon: Home,
+    icon: Home
   },
   {
     label: "Courses",
@@ -32,12 +32,11 @@ const menus: MenuItem[] = [
       {
         label: "Python - Basics",
         key: "courses/62c96de8d76bd4110d7b7464",
-        path: "/courses/62c96de8d76bd4110d7b7464",
-      },
-    ],
-  },
+        path: "/courses/62c96de8d76bd4110d7b7464"
+      }
+    ]
+  }
 ];
-
 
 const renderMenu = (menus: MenuItem[]): any =>
   menus.map((item) => ({
@@ -48,7 +47,7 @@ const renderMenu = (menus: MenuItem[]): any =>
       item.icon != null
         ? () => h(NIcon, null, { default: () => h(item.icon) })
         : undefined,
-    children: item.children ? renderMenu(item.children) : undefined,
+    children: item.children ? renderMenu(item.children) : undefined
   }));
 
 const menuOptions = renderMenu(menus);
@@ -63,6 +62,12 @@ const menuOptions = renderMenu(menus);
     collapse-mode="width"
     v-model:collapsed="collapsed"
   >
+    <router-link to="/" custom #="{ navigate, href }">
+      <n-a class="logo" :href="href" @click="navigate">
+        <img src="@/assets/logo.png" />
+        <span>MoxueOnline</span>
+      </n-a>
+    </router-link>
     <n-menu
       :value="currentKey"
       :options="menuOptions"
@@ -76,3 +81,29 @@ const menuOptions = renderMenu(menus);
   </n-layout-sider>
 </template>
 
+<style lang="less" scoped>
+.logo {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  font-size: 1.2em;
+  font-weight: 300;
+  text-decoration: none;
+  padding: 20px;
+  transition: padding 0.3s, font-size 0.3s;
+  img {
+    height: 32px;
+    margin-right: 8px;
+    transition: margin 0.3s;
+  }
+}
+
+.n-layout-sider--collapsed .logo {
+  font-size: 0;
+  padding: 20px 12px;
+  img {
+    margin-right: 0px;
+  }
+}
+</style>
