@@ -1,3 +1,3 @@
 <script setup lang="ts"></script>
 
-<template>Hello World</template>
+<template>Course List Page</template>

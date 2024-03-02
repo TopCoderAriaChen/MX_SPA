@@ -8,7 +8,7 @@ interface MenuItem {
   label: string;
   key: string;
   path: string;
-  icon: any;
+  icon?: any;
   children?: MenuItem[];
 }
 
@@ -18,18 +18,26 @@ const collapsed = ref(false);
 
 const menus: MenuItem[] = [
   {
-    label: 'Home',
-    key: 'home',
-    path: '/',
+    label: "Home",
+    key: "home",
+    path: "/",
     icon: Home,
   },
   {
-    label: 'Courses',
-    key: 'courses',
-    path: '/courses',
+    label: "Courses",
+    key: "courses",
+    path: "/courses",
     icon: Book,
+    children: [
+      {
+        label: "Python - Basics",
+        key: "courses/62c96de8d76bd4110d7b7464",
+        path: "/courses/62c96de8d76bd4110d7b7464",
+      },
+    ],
   },
 ];
+
 
 const renderMenu = (menus: MenuItem[]): any =>
   menus.map((item) => ({

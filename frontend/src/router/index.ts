@@ -13,21 +13,26 @@ const router = createRouter({
         {
           name: "home",
           path: "/home",
-          component: () => import("../views/HomeView.vue"),
+          component: () => import("../views/HomeView.vue")
         },
         {
           name: "courses",
           path: "/courses",
-          component: () => import("../views/CoursesView.vue"),
+          component: () => import("../views/CoursesView.vue")
         },
-      ],
+        {
+          name: "course",
+          path: "/courses/:id",
+          component: () => import("../views/CourseView.vue")
+        }
+      ]
     },
     {
       path: "/login",
       name: "login",
-      component: () => import("../views/LoginView.vue"),
-    },
-  ],
+      component: () => import("../views/LoginView.vue")
+    }
+  ]
 });
 
 export default router;
