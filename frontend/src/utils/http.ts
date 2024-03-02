@@ -1,5 +1,9 @@
 import axios, { AxiosError, type AxiosRequestHeaders } from "axios";
 import { useCookies } from "@vueuse/integrations/useCookies";
+import type { MessageApiInjection } from "naive-ui/es/message/src/MessageProvider";
+import router from "@/router";
+import { useAuthStore } from "@/stores/auth";
+
 
 interface Headers extends AxiosRequestHeaders {
   "X-CSRF-TOKEN": string;
@@ -32,7 +36,16 @@ axiosInstance.interceptors.response.use(
     if (error instanceof AxiosError && error.response) {
       switch (error.response.status) {
         case 401:
-          message.error(error.response.data["message"] || "Unauthorized");
+          if (router.currentRoute.value.name !== "login") {
+            const authStore = useAuthStore();
+            authStore.logout();
+            router.replace({
+              path: "/login",
+              query: { redirect: router.currentRoute.value.fullPath },
+            });
+          } else {
+            message.error(error.response.data["message"] || "Unauthorized");
+          }
           break;
         default:
           message.error(error.response.data.message || "Unknown Error");
@@ -41,6 +54,8 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+
 
 
 export default axiosInstance;
