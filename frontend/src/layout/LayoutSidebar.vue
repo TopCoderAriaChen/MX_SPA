@@ -13,7 +13,7 @@ interface MenuItem {
 }
 
 const route = useRoute();
-const currentKey = ref("home");
+const currentKey = ref(route.fullPath.slice(1));
 const collapsed = ref(false);
 
 const menus: MenuItem[] = [
