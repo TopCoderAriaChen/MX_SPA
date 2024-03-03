@@ -29,6 +29,9 @@ class CourseService(BaseService):
     
     def get_course(self, course_id: str) -> Course:
         return Course.objects(id=course_id).first_or_404("Course not exists")
+    
+    def delete_course(self, course_id: str) -> int:
+        return Course.objects(id=course_id).delete()
 
 
 def course_service():

@@ -28,3 +28,7 @@ class CourseApi(Resource):
     @permission_required("course_admin")
     def get(self, course_id):
         return CourseSchema.from_orm(course_service().get_course(course_id))
+
+    @permission_required("course_admin")
+    def delete(self, course_id):
+        return course_service().delete_course(course_id), 200
