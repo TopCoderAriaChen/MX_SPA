@@ -18,6 +18,7 @@ from app.user.controller import (
 from app.user import register_user_lookup
 from app.core.encoder import CustomEncoder
 from app.course.controller import api as course_api
+from app.order.controller import api as order_api
 
 from .log import config_log
 
@@ -33,6 +34,7 @@ api.add_namespace(admins_api)
 api.add_namespace(teachers_api)
 api.add_namespace(students_api)
 api.add_namespace(course_api)
+api.add_namespace(order_api)
 
 
 def create_app():

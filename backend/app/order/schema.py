@@ -19,7 +19,7 @@ class OrderSchema(MongoModel):
 class OrderCreateSchema(MongoModel):
     student: PydanticObjectId
     course: PydanticObjectId
-    original_price: float
+    original_price: float = None
     paid: bool = False
     paid_time: datetime = None
     paid_comment: str = None
@@ -32,7 +32,7 @@ class OrderPaymentSchema(BaseModel):
     paid: bool = True
     paid_time: datetime = datetime.utcnow()
     paid_comment: str = "No comment"
-    paid_price = None
+    paid_price: float = 0.0
 
 class OrderListSchema(MongoListModel):
     __root__: List[OrderSchema]
