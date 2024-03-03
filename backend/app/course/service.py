@@ -28,7 +28,7 @@ class CourseService(BaseService):
         return list(Course.objects(**querys))
     
     def get_course(self, course_id: str) -> Course:
-        self.logger.info("Fetching course")
+        self.logger.info("Getting course")
         return Course.objects(id=course_id).first_or_404("Course not exists")
     
     def delete_course(self, course_id: str) -> int:
