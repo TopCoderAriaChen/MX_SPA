@@ -37,9 +37,10 @@ class CourseService(BaseService):
         update_dict = course.dict(exclude_none=True, exclude_defaults=True)
         if len(update_dict) == 0:
             return
-        Course.objects(id=course_id).first_or_404("Course not exists").update_one(
+        Course.objects(id=course_id).first_or_404("Course not exists").update(
             **update_dict
         )
+ 
 
     def add_lecture(self, course_id: str, lecture: LectureCreateSchema) -> int:
         course: Course = Course.objects(id=course_id).first_or_404("Course not exists")
@@ -48,6 +49,13 @@ class CourseService(BaseService):
 
     def list_lectures(self, course_id: str) -> List[Lecture]:
         return Course.objects(id=course_id).first_or_404("Course not exists").lectures
+    
+    def delete_lecture(self, course_id: str, lecture_id: str) -> int:
+        return (
+            Course.objects(id=course_id)
+            .filter(lectures__id=lecture_id)
+            .update_one(pull__lectures__id=lecture_id)
+        )
 
 
 

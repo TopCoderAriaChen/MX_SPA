@@ -39,12 +39,20 @@ class CourseApi(Resource):
         course_service().update_course(course_id, body)
         return
 
+
 @api.route("/<string:course_id>/lectures")
 class CourseLecturesApi(Resource):
     @permission_required("course_admin")
     def get(self, course_id):
         return (
-            LectureListSchema.from_orm(course_service().list_lectures(course_id)), 
+            LectureListSchema.from_orm(course_service().list_lectures(course_id)),
+            200,
+        )
+
+    @permission_required("course_admin")
+    def delete(self, course_id):
+        return (
+            course_service().delete_lecture(course_id),
             200,
         )
 
@@ -53,4 +61,11 @@ class CourseLecturesApi(Resource):
     def post(self, course_id, body: LectureCreateSchema):
         return course_service().add_lecture(course_id, body), 201
 
-
+@api.route("/<string:course_id>/lectures/<string:lecture_id>")
+class CourseLectureApi(Resource):
+    @permission_required("course_admin")
+    def delete(self, course_id, lecture_id):
+        return (
+            course_service().delete_lecture(course_id, lecture_id),
+            200,
+        )
