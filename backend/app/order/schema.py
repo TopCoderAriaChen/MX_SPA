@@ -32,7 +32,7 @@ class OrderPaymentSchema(BaseModel):
     paid: bool = True
     paid_time: datetime = datetime.utcnow()
     paid_comment: str = "No comment"
-    paid_price: float = 0.0
+    paid_price: float = None
 
 class OrderListSchema(MongoListModel):
     __root__: List[OrderSchema]

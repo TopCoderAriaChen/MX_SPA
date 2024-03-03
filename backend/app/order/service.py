@@ -3,7 +3,7 @@ from flask_jwt_extended import get_current_user
 from app.core.service import BaseService
 from app.course.model import Course
 from app.order.model import Order
-from app.order.schema import OrderCreateSchema
+from app.order.schema import OrderCreateSchema, OrderPaymentSchema
 from app.user.model import Student, User
 
 class OrderService(BaseService):
@@ -37,6 +37,15 @@ class OrderService(BaseService):
         order = Order.objects(id=order_id).first_or_404("Order not exists")
         return order.delete()
 
+    def pay_order(self, order_id, payment_info: OrderPaymentSchema):
+        order: Order = Order.objects(id=order_id).first_or_404("Order not exists")
+        if payment_info.paid_price is None:
+            payment_info.paid_price = order.original_price
+        order_updated = order.update(**payment_info.dict())
+        order.reload() 
+        if order.paid:
+            order.course.update(add_to_set__enrolled_students=order.student)
+        return order_updated
 
-def order_service():
+def order_service() -> OrderService:
     return OrderService(get_current_user())

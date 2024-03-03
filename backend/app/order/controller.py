@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from flask_pydantic import validate
 from flask_restx import Namespace, Resource
 
-from app.order.schema import OrderCreateSchema, OrderListSchema, OrderSchema
+from app.order.schema import OrderCreateSchema, OrderListSchema, OrderPaymentSchema, OrderSchema
 from app.order.service import order_service
 from app.user import permission_required
 
@@ -33,3 +33,11 @@ class OrderApi(Resource):
     @permission_required("order_admin")
     def delete(self, order_id):
         return order_service().delete_order(order_id)
+
+
+@api.route("/<string:order_id>/payment")
+class OrderPaymentApi(Resource):
+    @permission_required("order_admin")
+    @validate()
+    def put(self, order_id, body: OrderPaymentSchema):
+        return order_service().pay_order(order_id, body)
