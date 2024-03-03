@@ -26,6 +26,10 @@ class CourseService(BaseService):
         if teacher is not None:
             querys["teacher"] = teacher
         return list(Course.objects(**querys))
+    
+    def get_course(self, course_id: str) -> Course:
+        return Course.objects(id=course_id).first_or_404("Course not exists")
+
 
 def course_service():
     return CourseService(get_current_user())
