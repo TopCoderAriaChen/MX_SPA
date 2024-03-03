@@ -16,7 +16,7 @@ from app.user.controller import (
     teachers_api,
 )
 from app.user import register_user_lookup
-from app.core.converter import CustomEncoder
+from app.core.encoder import CustomEncoder
 from app.course.controller import api as course_api
 
 from .log import config_log

@@ -2,7 +2,7 @@ from typing import List
 
 from app.campus.model import Campus
 from app.core.service import BaseService
-from app.course.model import Course
+from app.course.model import Course, Lecture
 from app.course.schema import CourseCreateSchema, CoursePutSchema, LectureCreateSchema
 from app.user.model import Teacher, User
 from flask_jwt_extended import get_current_user
@@ -45,6 +45,9 @@ class CourseService(BaseService):
         course: Course = Course.objects(id=course_id).first_or_404("Course not exists")
         course.update(push__lectures=lecture.dict(exclude_none=True))
         return str(lecture.id)
+
+    def list_lectures(self, course_id: str) -> List[Lecture]:
+        return Course.objects(id=course_id).first_or_404("Course not exists").lectures
 
 
 
