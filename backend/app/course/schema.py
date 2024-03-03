@@ -1,6 +1,8 @@
+import uuid
 from datetime import datetime
-from typing import List, Type
+from typing import List
 from uuid import UUID
+
 from app.core.types import AllOptional, MongoListModel, MongoModel, PydanticObjectId
 
 
@@ -12,7 +14,7 @@ class LectureSchema(MongoModel):
     scheduled_at: datetime
 
 class LectureCreateSchema(LectureSchema):
-    id: UUID = None
+    id: UUID = uuid.uuid4()
 
 class LecturePutSchema(LectureSchema, metaclass=AllOptional):
     pass
