@@ -3,7 +3,7 @@ from typing import List
 from app.campus.model import Campus
 from app.core.service import BaseService
 from app.course.model import Course, Lecture
-from app.course.schema import CourseCreateSchema, CoursePutSchema, LectureCreateSchema
+from app.course.schema import CourseCreateSchema, CoursePutSchema, LectureCreateSchema, LecturePutSchema
 from app.user.model import Teacher, User
 from flask_jwt_extended import get_current_user
 
@@ -56,7 +56,17 @@ class CourseService(BaseService):
             .filter(lectures__id=lecture_id)
             .update_one(pull__lectures__id=lecture_id)
         )
-
+    
+    def update_lecture(self, course_id: str, lecture_id: str, lecture: LecturePutSchema) -> int:
+        update_action = {
+            f"set__lectures__S__{key}": value
+            for key, value in lecture.dict(exclude_defaults=True).items()
+        }
+        return (
+            Course.objects(id=course_id)
+            .filter(lectures__id=lecture_id)
+            .update_one(**update_action)
+        )
 
 
 def course_service():
