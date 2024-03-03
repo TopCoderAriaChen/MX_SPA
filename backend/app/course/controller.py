@@ -2,7 +2,7 @@ from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restx import Namespace, Resource
 from flask_pydantic import validate
-from app.course.schema import CourseCreateSchema, CourseListSchema, CourseSchema
+from app.course.schema import CourseCreateSchema, CourseListSchema, CoursePutSchema, CourseSchema
 from app.course.service import course_service
 from app.user import permission_required
 
@@ -32,3 +32,10 @@ class CourseApi(Resource):
     @permission_required("course_admin")
     def delete(self, course_id):
         return course_service().delete_course(course_id), 200
+
+    @permission_required("course_admin")
+    @validate()
+    def put(self, course_id, body: CoursePutSchema):
+        course_service().update_course(course_id, body)
+        return
+

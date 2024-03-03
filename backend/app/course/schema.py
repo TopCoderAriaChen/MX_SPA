@@ -46,6 +46,16 @@ class CourseCreateSchema(MongoModel):
     lectures: List[LectureSchema] = []
     enrolled_students: List[PydanticObjectId] = []
 
+
+class CoursePutSchema(MongoModel, metaclass=AllOptional):
+    name: str
+    description: str
+    teacher: PydanticObjectId
+    publish_time: datetime = None
+    original_price: float = 0.0
+    cover_image: str = ""
+
+
 class CourseBasicInfoSchema(MongoModel):
     id: PydanticObjectId
     name: str
