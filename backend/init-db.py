@@ -28,7 +28,7 @@ support = Admin(
     display_name = "Support A",
     password = get_hashed_password("password"),
     telephone = "123", 
-    permissions = ["course_admin"],
+    permissions = ["course_admin", "user_admin"],
     campus = unimelb_campus,
 )
 support.save()

@@ -3,6 +3,7 @@ from app.campus.model import Campus
 from flask_restx import Namespace, Resource
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, current_user
+from flask_pydantic import validate
 
 from .model import Admin, Student, Teacher, User, check_password, get_hashed_password
 from .schema import AdminCreateSchema, AdminListSchema, AdminSchema, StudentCreateSchema, StudentListSchema, StudentSchema, TeacherCreateSchema, TeacherListSchema, TeacherSchema, UserSchema, UserListSchema
@@ -73,6 +74,11 @@ class UserApi(Resource):
     def get(self, username):
         return UserSchema.from_orm(user_service().get_user(username=username)), 200
     
+    @jwt_required()
+    def put(self, username) :
+        user_service().update_user(username, **request.json)
+        return 
+
     @jwt_required()
     def delete(self, username):
         user_service().delete_user(username=username)

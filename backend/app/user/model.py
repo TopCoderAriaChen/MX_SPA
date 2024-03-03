@@ -1,6 +1,6 @@
 import base64
 import hashlib
-from app.user.schema import AdminSchema, StudentSchema, TeacherSchema, UserSchema
+from app.user.schema import AdminPutSchema, AdminSchema, StudentPutSchema, StudentSchema, TeacherPutSchema, TeacherSchema, UserPutSchema, UserSchema
 import bcrypt
 from datetime import datetime
 
@@ -35,6 +35,12 @@ class User(Document):
 
     def to_dict(self):
         return UserSchema.from_orm(self).dict()
+    
+    def update_from_dict(self, **kwargs):
+        if len(kwargs) == 0:
+            return
+        user = UserPutSchema(**kwargs)
+        self.update(**user.dict(exclude_defaults=True, exclude_none=True))
 
 
 class Student(User):
@@ -43,6 +49,12 @@ class Student(User):
 
     def to_dict(self):
         return StudentSchema.from_orm(self).dict()
+    
+    def update_from_dict(self, **kwargs):
+        if len(kwargs) == 0:
+            return        
+        user = StudentPutSchema(**kwargs)
+        self.update(**user.dict(exclude_defaults=True, exclude_none=True))
 
 
 class Admin(User):
@@ -50,6 +62,12 @@ class Admin(User):
 
     def to_dict(self):
         return AdminSchema.from_orm(self).dict()
+    
+    def update_from_dict(self, **kwargs):
+        if len(kwargs) == 0:
+            return
+        user = AdminPutSchema(**kwargs)
+        self.update(**user.dict(exclude_defaults=True, exclude_none=True))
 
 
 class Teacher(User):
@@ -57,3 +75,9 @@ class Teacher(User):
 
     def to_dict(self):
         return TeacherSchema.from_orm(self).dict()
+    
+    def update_from_dict(self, **kwargs):
+        if len(kwargs) == 0:
+            return
+        user = TeacherPutSchema(**kwargs)
+        self.update(**user.dict(exclude_defaults=True, exclude_none=True))

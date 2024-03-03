@@ -3,7 +3,7 @@ from typing import List
 
 from pydantic import SecretStr, validator
 
-from app.core.types import MongoListModel, MongoModel, PydanticObjectId
+from app.core.types import AllOptional, MongoListModel, MongoModel, PydanticObjectId
 
 class UserSchema(MongoModel):
     id: PydanticObjectId
@@ -25,13 +25,19 @@ class UserSchema(MongoModel):
         fields = {"user_type": "_cls"}
 
 
-
-class UserCreateSchema(MongoModel):
+class UserCreateSchema(MongoModel, ):
     username: str
     password: str
     display_name: str
     telephone: str
     campus: PydanticObjectId
+
+
+class UserPutSchema(MongoModel, metaclass=AllOptional):
+    password: str
+    display_name: str
+    telephone: str
+    
 
 
 class StudentSchema(UserSchema):
@@ -43,18 +49,34 @@ class StudentCreateSchema(UserCreateSchema):
     uni: str 
 
 
+class StudentPutSchema(UserPutSchema, metaclass=AllOptional):
+    wx: str
+    uni: str
+
+
+
 class AdminSchema(UserSchema):
     permissions: List[str]
 
 class AdminCreateSchema(UserCreateSchema):
     permissions: List[str]
 
- 
+
+class AdminPutSchema(UserPutSchema, metaclass=AllOptional):
+    permissions: List[str]
+
+
+
 class TeacherSchema(UserSchema):
     abn: str = None
 
 class TeacherCreateSchema(UserCreateSchema):
     abn: str = None
+
+
+class TeacherPutSchema(UserPutSchema, metaclass=AllOptional):
+    abn: str = None
+
 
 
 class UserListSchema(MongoListModel):
