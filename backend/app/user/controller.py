@@ -75,7 +75,7 @@ class UserApi(Resource):
         return UserSchema.from_orm(user_service().get_user(username=username)), 200
     
     @jwt_required()
-    def put(self, username) :
+    def put(self, username):
         user_service().update_user(username, **request.json)
         return 
 

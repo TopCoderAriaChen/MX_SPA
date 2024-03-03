@@ -17,6 +17,7 @@ from app.user.controller import (
 )
 from app.user import register_user_lookup
 from app.core.converter import CustomEncoder
+from app.course.controller import api as course_api
 
 from .log import config_log
 
@@ -31,6 +32,8 @@ api.add_namespace(users_api)
 api.add_namespace(admins_api)
 api.add_namespace(teachers_api)
 api.add_namespace(students_api)
+api.add_namespace(course_api)
+
 
 def create_app():
     app = Flask(os.getenv("FLASK_APP_NAME"))
