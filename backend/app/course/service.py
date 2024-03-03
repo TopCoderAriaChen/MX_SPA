@@ -34,10 +34,13 @@ class CourseService(BaseService):
         return Course.objects(id=course_id).delete()
 
     def update_course(self, course_id: str, course: CoursePutSchema):
+        update_dict = course.dict(exclude_none=True, exclude_defaults=True)
+        if len(update_dict) == 0:
+            return
         Course.objects(id=course_id).first_or_404("Course not exists").update(
-            **course.dict()
+            **update_dict
         )
-        
+
 
 def course_service():
     return CourseService(get_current_user())
