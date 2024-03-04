@@ -11,6 +11,14 @@ class CourseService(BaseService):
     def __init__(self, user: User) -> None:
         super().__init__(CourseService.__name__, user)
 
+    def get_course_query(self, **kwargs):
+        if self.user._cls == "User.Admin" and "course_admin" in self.user.permissions:
+            return Course.objects(**kwargs)
+        if self.user._cls == "User.Teacher":
+            return Course.objects(teacher=self.user, **kwargs)
+        else:
+            return Course.objects(enrolled_students=self.user, **kwargs)
+
     def create_course(self, course: CourseCreateSchema) -> Course:
         self.logger.info("Creating course")
         Campus.objects(id=course.campus).first_or_404("Campus not exists")
@@ -19,17 +27,16 @@ class CourseService(BaseService):
         return course.save()
 
     def list_courses(self, campus: str = None, teacher: str = None) -> List[Course]:
-        self.logger.info("Listing courses")
-        querys: dict = {}
+        self.logger.info("Fetching courses")
+        querys = {}
         if campus is not None:
             querys["campus"] = campus
         if teacher is not None:
             querys["teacher"] = teacher
         return list(Course.objects(**querys))
-    
+
     def get_course(self, course_id: str) -> Course:
-        self.logger.info("Getting course")
-        return Course.objects(id=course_id).first_or_404("Course not exists")
+        return self.get_course_query(id=course_id).first_or_404("Course not exists")
     
     def delete_course(self, course_id: str) -> int:
         self.logger.info("Deleting course")

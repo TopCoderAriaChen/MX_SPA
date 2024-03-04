@@ -27,7 +27,7 @@ class CoursesApi(Resource):
 @api.route("/<string:course_id>")
 class CourseApi(Resource):
 
-    @permission_required("course_admin")
+    @jwt_required()
     def get(self, course_id):
         return CourseSchema.from_orm(course_service().get_course(course_id))
 
