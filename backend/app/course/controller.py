@@ -2,7 +2,7 @@ from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restx import Namespace, Resource
 from flask_pydantic import validate
-from app.course.schema import CourseCreateSchema, CourseListSchema, CoursePutSchema, CourseSchema, LectureCreateSchema, LectureListSchema, LecturePutSchema
+from app.course.schema import CourseCreateSchema, CourseListSchema, CoursePutSchema, CourseDetailSchema, LectureCreateSchema, LectureListSchema, LecturePutSchema
 from app.course.service import course_service
 from app.user import permission_required
 
@@ -29,7 +29,7 @@ class CourseApi(Resource):
 
     @jwt_required()
     def get(self, course_id):
-        return CourseSchema.from_orm(course_service().get_course(course_id))
+        return CourseDetailSchema.from_orm(course_service().get_course(course_id))
 
     @permission_required("course_admin")
     def delete(self, course_id):
