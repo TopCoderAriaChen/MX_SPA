@@ -28,7 +28,7 @@ class OrdersApi(Resource):
 
 @api.route("/<string:order_id>")
 class OrderApi(Resource):
-    @permission_required("order_admin")
+    @jwt_required()
     def get(self, order_id):
         order = order_service().get_order(order_id)
         return OrderSchema.from_orm(order)

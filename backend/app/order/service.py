@@ -25,7 +25,7 @@ class OrderService(BaseService):
             self.logger.info("Placing orders", order.dict())
             Student.objects(id=order.student).first_or_404("Student not exists")
             course = Course.objects(id=order.course).first_or_404("Course not exists")
-            order.original_price = course.original_price
+            order.original_price = course.original_price 
             return Order(**order.dict(exclude_none=True)).save()
         else:
             raise PermissionDenied()
@@ -46,7 +46,8 @@ class OrderService(BaseService):
 
     
     def get_order(self, order_id) -> Order:
-        return Order.objects(id=order_id).first_or_404("Order not exists")
+        return self.get_order_query(id=order_id).first_or_404("Order not exists")
+
 
     def delete_order(self, order_id) -> int:
         order = Order.objects(id=order_id).first_or_404("Order not exists")
