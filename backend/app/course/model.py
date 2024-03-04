@@ -14,7 +14,7 @@ from mongoengine import (
 )
 
 from app.campus.model import Campus
-from app.user.model import Teacher, User
+from app.user.model import Student, Teacher
  
 class Lecture(EmbeddedDocument):
     id = UUIDField(primary_key=True, binary=False, default=uuid.uuid4)
@@ -36,7 +36,11 @@ class Course(Document):
     cover_image = StringField(default="")
     lectures = EmbeddedDocumentListField(Lecture, default=[])
     enrolled_students = ListField(
-        ReferenceField(User, reverse_delete_rule=CASCADE, default=[])
+        ReferenceField(Student, reverse_delete_rule=CASCADE, default=[])
     )
 
     meta = {"indexes": ["uni_course_code","teacher","campus"]}
+
+
+
+Student.register_delete_rule(Course, "enrolled_courses", CASCADE)

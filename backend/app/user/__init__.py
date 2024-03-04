@@ -2,6 +2,7 @@ from .model import User
 import functools
 from flask_jwt_extended import current_user, jwt_required
 from ..exceptions.permission_exceptions import PermissionDenied
+from .model import Admin, Student, Teacher, User
 
 def register_user_lookup(jwt):
     def user_lookup_callback(_jwt_header, jwt_data):

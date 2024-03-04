@@ -40,11 +40,22 @@ class UserPutSchema(MongoModel, metaclass=AllOptional):
     
 
 
+class StudentEnrolledCourses(MongoModel):
+    course_id: PydanticObjectId
+    course_name: str
+
+    class Config(MongoModel.Config):
+        fields = {"course_id": "id", "course_name": "name"}
+
+
+
 class StudentSchema(UserSchema):
     wx: str = None
     uni: str = None
+    enrolled_courses: List[StudentEnrolledCourses]
 
-class StudentCreateSchema(UserCreateSchema): 
+      
+class StudentCreateSchema(MongoModel): 
     wx: str
     uni: str 
 

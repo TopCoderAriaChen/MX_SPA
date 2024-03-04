@@ -61,6 +61,7 @@ class OrderService(BaseService):
         order.reload() 
         if order.paid:
             order.course.update(add_to_set__enrolled_students=order.student)
+            order.student.update(add_to_set__enrolled_courses=order.course)
         return order_updated
 
 def order_service() -> OrderService:
