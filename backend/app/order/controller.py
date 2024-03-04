@@ -2,21 +2,24 @@ from flask import request
 from flask_jwt_extended import jwt_required
 from flask_pydantic import validate
 from flask_restx import Namespace, Resource
-
+from flask import request
 from app.order.schema import OrderCreateSchema, OrderListSchema, OrderPaymentSchema, OrderSchema
 from app.order.service import order_service
 from app.user import permission_required
 
-api: Namespace = Namespace("orders")
+api = Namespace("orders")
 
 @api.route("")
 class OrdersApi(Resource):
-    @permission_required("order_admin")
-    def get(self):
-        orders = order_service().list_orders()
+    @jwt_required()
+    def get(self) -> OrderListSchema:
+        campus = request.args.get("campus", None)
+        user = request.args.get("user ", None)
+        course = request.args.get("course", None)
+        orders = order_service().list_orders(user, course, campus)
         return OrderListSchema.from_orm(orders)
 
-    @permission_required("order_admin")
+    @jwt_required()
     @validate()
     def post(self, body: OrderCreateSchema): 
         order_id = str(order_service().place_order(body).id)

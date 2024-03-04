@@ -1,4 +1,5 @@
 from typing import List
+from app.exceptions.permission_exceptions import PermissionDenied
 from flask_jwt_extended import get_current_user
 from app.core.service import BaseService
 from app.course.model import Course
@@ -10,25 +11,39 @@ class OrderService(BaseService):
     def __init__(self, user: User):
         super().__init__(OrderService.__name__, user)
 
+    def get_order_query(self, **kwargs) :
+        if self.user._cls == "User.Admin" and "order_admin" in self.user.permissions:
+            return Order.objects(**kwargs)
+        else:
+            return Order.objects(student=self.user, **kwargs)
+
+
     def place_order(self, order: OrderCreateSchema) -> Order:
-        self.logger.info("Placing orders", order.dict())
-        Student.objects(id=order.student).first_or_404("Student not exists")
-        course = Course.objects(id=order.course).first_or_404("Course not exists")
-        order.original_price = course.original_price
-        return Order(**order.dict(exclude_none=True)).save()
+        if (
+            self.user._cls == "User.Admin" and "order_admin" in self.user.permissions
+        ) or (str(self.user.id) == order.student):
+            self.logger.info("Placing orders", order.dict())
+            Student.objects(id=order.student).first_or_404("Student not exists")
+            course = Course.objects(id=order.course).first_or_404("Course not exists")
+            order.original_price = course.original_price
+            return Order(**order.dict(exclude_none=True)).save()
+        else:
+            raise PermissionDenied()
+
 
     def list_orders(
         self, user: str = None, course: str = None, campus: str = None
     ) -> List[Order]:
-        self.logger.info("Listing orders")
-        querys: dict = {}
+        self.logger.info("Fetching orders")
+        querys = {}
         if user is not None:
             querys["user"] = user
         if course is not None:
             querys["course"] = course
         if campus is not None:
             querys["campus"] = campus
-        return list(Order.objects(**querys))
+        return list(self.get_order_query(**querys))
+
     
     def get_order(self, order_id) -> Order:
         return Order.objects(id=order_id).first_or_404("Order not exists")
