@@ -3,12 +3,11 @@ import axios from "@/utils/http";
 import { defineStore } from "pinia";
 import { useLocalStorage, StorageSerializers } from "@vueuse/core";
 import type { User } from "@/interfaces/user.interface";
-import { stat } from "fs";
 
 const PREFIX = import.meta.env.VITE_STORAGE_PREFIX;
 const USER_INFO_PREFIX = PREFIX + "user_info";
 
-export const useAuthStore = defineStore({
+export const useAuthStore: any = defineStore({ 
   id: "auth",
   state: () => ({
     userInfo: useLocalStorage<User | null>(USER_INFO_PREFIX, null, {

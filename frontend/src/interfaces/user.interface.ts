@@ -1,4 +1,4 @@
-import { User } from "./user.interface";
+
 export interface User {
   username: String;
   password: String | null;
@@ -9,6 +9,6 @@ export interface User {
   wx?: String;
   uni?: String;
   permissions?: [String];
-  User_type: String;
+  user_type: String;
   abn?: String;
 }

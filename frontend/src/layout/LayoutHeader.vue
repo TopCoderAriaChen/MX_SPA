@@ -20,7 +20,7 @@ const displayName = computed(() => {
 
 const options = [{ label: "Sign out", key: "logout" }];
 const handleOptionSelect = async (key: string) => {
-  if (key === "logout") {
+  if (key === "logout") { 
     await authStore.logout();
     await router.push("/login");
   }
