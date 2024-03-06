@@ -1,4 +1,3 @@
-
 export interface User {
   username: String;
   password: String | null;
@@ -11,4 +10,10 @@ export interface User {
   permissions?: [String];
   user_type: String;
   abn?: String;
+  enrolled_courses?:[
+    {
+      course_id: String;
+      course_name: String;
+    }
+  ]
 }

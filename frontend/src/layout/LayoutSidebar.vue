@@ -3,7 +3,7 @@ import { NIcon, NLayoutSider, NMenu, NA } from "naive-ui";
 import { ref, h, computed } from "vue";
 import { useRoute, RouterLink } from "vue-router";
 import { Book, Home } from "@vicons/ionicons5";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "../stores/auth.ts"
 import { storeToRefs } from "pinia";
 
 interface MenuItem {
@@ -53,7 +53,7 @@ const renderMenu = (menus: MenuItem[]): any =>
       item.icon != null
         ? () => h(NIcon, null, { default: () => h(item.icon) })
         : undefined,
-    children: item.children ? renderMenu(item.children) : undefined,
+    children: item.children ? renderMenu(item.children) : undefined
   }));
 
 const menuOptions = computed(() => renderMenu(menus.value));

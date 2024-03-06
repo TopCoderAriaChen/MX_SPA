@@ -5,6 +5,6 @@ import { NLayoutContent } from "naive-ui";
 
 <template>
   <n-layout-content content-style="padding: 24px">
-    <router-view></router-view>
+    <router-view :key="$route.fullPath"></router-view>
   </n-layout-content>
 </template>

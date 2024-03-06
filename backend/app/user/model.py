@@ -1,12 +1,22 @@
 import base64
 import hashlib
-from app.user.schema import AdminPutSchema, AdminSchema, StudentPutSchema, StudentSchema, TeacherPutSchema, TeacherSchema, UserPutSchema, UserSchema
-import bcrypt
 from datetime import datetime
 
+import bcrypt
 from flask_mongoengine import Document
-from mongoengine import StringField, ReferenceField, CASCADE, ListField, DateTimeField
+from mongoengine import CASCADE, DateTimeField, ListField, ReferenceField, StringField
+
 from app.campus.model import Campus
+from app.user.schema import (
+    AdminPutSchema,
+    AdminSchema,
+    StudentPutSchema,
+    StudentSchema,
+    TeacherPutSchema,
+    TeacherSchema,
+    UserPutSchema,
+    UserSchema,
+)
 
 def get_hashed_password(plain_text_password):
     return bcrypt.hashpw(

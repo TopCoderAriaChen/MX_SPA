@@ -1,24 +1,25 @@
 import os
-from app.exceptions import register_resources_exception_handler
+
 from dotenv import load_dotenv
-from flask import Flask, Blueprint
+from flask import Blueprint, Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from flask_restx import Api
 from flask_mongoengine import MongoEngine
+from flask_restx import Api
 
 from app.campus.controller import api as campus_api
-from app.user.controller import (
-    admins_api, 
-    auth_api, 
-    users_api, 
-    students_api, 
-    teachers_api,
-)
-from app.user import register_user_lookup
 from app.core.encoder import CustomEncoder
 from app.course.controller import api as course_api
+from app.exceptions import register_resources_exception_handler
 from app.order.controller import api as order_api
+from app.user import register_user_lookup
+from app.user.controller import (
+    admins_api,
+    auth_api,
+    students_api,
+    teachers_api,
+    users_api,
+)
 
 from .log import config_log
 

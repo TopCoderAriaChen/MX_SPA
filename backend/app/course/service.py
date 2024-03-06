@@ -1,4 +1,5 @@
 from typing import List
+import uuid
 
 from app.campus.model import Campus
 from app.core.service import BaseService
@@ -53,6 +54,7 @@ class CourseService(BaseService):
  
 
     def add_lecture(self, course_id: str, lecture: LectureCreateSchema) -> int:
+        lecture.id = uuid.uuid4()
         self.logger.info("Adding lecture")
         course: Course = Course.objects(id=course_id).first_or_404("Course not exists")
         course.update(push__lectures=lecture.dict(exclude_none=True))
