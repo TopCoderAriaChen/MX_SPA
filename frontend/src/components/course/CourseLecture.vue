@@ -1,3 +1,5 @@
+
+import { progressProps } from 'naive-ui';
 <script lang="ts" setup>
 import { deleteLecture, type Lecture } from "@/api/courses";
 import { computed, defineProps } from "vue";
@@ -21,12 +23,14 @@ const props = defineProps<{
   lecture: Lecture;
   course_id: string;
   isAdmin: boolean;
+  onUpdate: () => void;
 }>();
 
 const scheduled_at = computed(() => new Date(props.lecture.scheduled_at + "Z"));
 
 const handleDelete = async () => {
   await deleteLecture(props.course_id, props.lecture.id);
+  props.onUpdate();
 };
 </script>
 
