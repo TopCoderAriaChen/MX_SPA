@@ -1,7 +1,5 @@
-
-import { progressProps } from 'naive-ui';
 <script lang="ts" setup>
-import { deleteLecture, type Lecture } from "@/api/courses";
+import { deleteLecture, type Lecture } from "@/api/course";
 import { computed, defineProps } from "vue";
 import {
   NCard,
