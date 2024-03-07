@@ -10,7 +10,7 @@ const route = useRoute();
 const {
   data: course,
   isFinished,
-  execute: reloadCourse
+  execute: reloadCourse,
 } = useCourse(route.params.id.toString());
 const { hasPermission } = useAuthStore();
 </script>
@@ -21,8 +21,8 @@ const { hasPermission } = useAuthStore();
       <n-h1>
         {{ course.name }}
         <span class="text-slate-400 text-xl">
-          ({{ course.uni_course_code }})
-        </span>
+          ({{ course.uni_course_code }})</span
+        >
       </n-h1>
       <course-details :course="course" />
       <n-divider>Lectures</n-divider>
