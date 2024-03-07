@@ -47,20 +47,18 @@ def create_app():
 
     # Log
     config_log(app)
-    
+
     # DB
     MongoEngine(app)
-    
-    # CORS
-    CORS(app)
 
     # JWT
     jwt = JWTManager(app)
     register_user_lookup(jwt)
 
+    # CORS
+    CORS(app)
 
     app.register_blueprint(api_bp)
     register_resources_exception_handler(api)
-
 
     return app

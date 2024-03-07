@@ -3,3 +3,5 @@ __pycache__
 venv
 docker
 logs
+.env.prod
+.DS_Store
