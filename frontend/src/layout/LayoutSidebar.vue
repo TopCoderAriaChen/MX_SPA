@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import { NIcon, NLayoutSider, NMenu, NA } from "naive-ui";
-import { ref, h, computed } from "vue";
+import { ref, h, computed, watchEffect } from "vue";
 import { useRoute, RouterLink } from "vue-router";
-import { Book, Home } from "@vicons/ionicons5";
-import { useAuthStore } from "../stores/auth.ts"
+import { Book, Cart, Grid, Home } from "@vicons/ionicons5";
+import { useAuthStore } from "@/stores/auth";
 import { storeToRefs } from "pinia";
-
 interface MenuItem {
   label: string;
   key: string;
@@ -13,20 +12,30 @@ interface MenuItem {
   icon?: any;
   children?: MenuItem[];
 }
-
 const route = useRoute();
 const currentKey = ref(route.fullPath.slice(1));
 const collapsed = ref(false);
-const authStore = useAuthStore();
-const auth = storeToRefs(authStore);
+const autStore = useAuthStore();
+const auth = storeToRefs(autStore);
 
+watchEffect(() => {
+  if (route.fullPath !== currentKey.value) {
+    currentKey.value = route.fullPath.slice(1);
+  }
+});
 const menus = computed<MenuItem[]>(() => {
   return [
     {
       label: "Home",
       key: "home",
       path: "/",
-      icon: Home
+      icon: Home,
+    },
+    {
+      label: "All Courses",
+      key: "browse",
+      icon: Grid,
+      path: "/browse",
     },
     {
       label: "Courses",
@@ -34,13 +43,19 @@ const menus = computed<MenuItem[]>(() => {
       path: "/courses",
       icon: Book,
       children: auth.getUserInfo.value?.enrolled_courses?.map(
-        ({ course_id, course_name }) => ({
-          label: course_name,
-          key: `courses/${course_id}`,
-          path: `/courses/${course_id}`
+        ({ id, name }) => ({
+          label: name,
+          key: `courses/${id}`,
+          path: `/courses/${id}`,
         })
-      )
-    }
+      ),
+    },
+    {
+      label: "Orders",
+      key: "orders",
+      icon: Cart,
+      path: "/orders",
+    },
   ];
 });
 
@@ -53,12 +68,11 @@ const renderMenu = (menus: MenuItem[]): any =>
       item.icon != null
         ? () => h(NIcon, null, { default: () => h(item.icon) })
         : undefined,
-    children: item.children ? renderMenu(item.children) : undefined
+    children: item.children ? renderMenu(item.children) : undefined,
   }));
 
 const menuOptions = computed(() => renderMenu(menus.value));
 </script>
-
 <template>
   <n-layout-sider
     bordered
@@ -70,8 +84,8 @@ const menuOptions = computed(() => renderMenu(menus.value));
   >
     <router-link to="/" custom #="{ navigate, href }">
       <n-a class="logo" :href="href" @click="navigate">
-        <img src="@/assets/logo.png" />
-        <span>MoxueOnline</span>
+        <img src="@/assets/logo.jpg" />
+        <span>ShangxueOnline</span>
       </n-a>
     </router-link>
     <n-menu

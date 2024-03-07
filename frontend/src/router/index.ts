@@ -1,6 +1,6 @@
-import { useAuthStore } from '@/stores/auth';
 import { createRouter, createWebHistory } from "vue-router";
-import Layout from "../layout/index.vue";
+import Layout from "@/layout/index.vue";
+import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,8 +17,26 @@ const router = createRouter({
           component: () => import("../views/HomeView.vue"),
           meta: {
             requiresAuth: true,
-            title: "Home"
-          }
+            title: "Home",
+          },
+        },
+        {
+          name: "orders",
+          path: "/orders",
+          component: () => import("../views/OrdersView.vue"),
+          meta: {
+            requiresAuth: true,
+            title: "Orders",
+          },
+        },
+        {
+          name: "browse",
+          path: "/browse",
+          component: () => import("../views/BrowseView.vue"),
+          meta: {
+            title: "All Courses",
+            requiresAuth: true,
+          },
         },
         {
           name: "courses",
@@ -26,8 +44,8 @@ const router = createRouter({
           component: () => import("../views/CoursesView.vue"),
           meta: {
             requiresAuth: true,
-            title: "Course"
-          }
+            title: "Course",
+          },
         },
         {
           name: "course",
@@ -35,10 +53,10 @@ const router = createRouter({
           component: () => import("../views/CourseView.vue"),
           meta: {
             requiresAuth: true,
-            title: "Course Page"
-          }
-        }
-      ]
+            title: "Course Page",
+          },
+        },
+      ],
     },
     {
       path: "/login",
@@ -46,25 +64,24 @@ const router = createRouter({
       component: () => import("../views/LoginView.vue"),
       meta: {
         requiresAuth: false,
-        title: "Login"
-      }
-    }
-  ]
+        title: "Login",
+      },
+    },
+  ],
 });
 
 router.beforeEach((to) => {
-  const AuthStore = useAuthStore();
-  if (to.meta.requiresAuth && !AuthStore.isLoggedIn) {
+  const authStore = useAuthStore();
+  if (to.meta.requiresAuth && !authStore.isLoggedIn) {
     return {
-      name: "login",  
-      query: {redirect: to.fullPath},
-    }
+      name: "login",
+      query: { redirect: to.fullPath },
+    };
   }
 });
 
 router.afterEach((to) => {
-  document.title = to.meta.title || to.name?.toString() || 
-  "MoxueOnline";
+  document.title = to.meta.title || to.name?.toString() || "ShangxueOnline";
 });
 
 export default router;
