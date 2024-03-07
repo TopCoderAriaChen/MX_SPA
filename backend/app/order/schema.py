@@ -3,7 +3,14 @@ from typing import List
 
 from pydantic import BaseModel
 
-from app.core.types import AllOptional, MongoListModel, MongoModel, PydanticObjectId
+from app.core.types import (
+    AllOptional,
+    MongoListModel,
+    MongoModel,
+    PaginatedModel,
+    PydanticObjectId,
+)
+
 
 class OrderSchema(MongoModel):
     id: PydanticObjectId
@@ -15,6 +22,23 @@ class OrderSchema(MongoModel):
     paid_time: datetime = None
     paid_comment: str = None
     paid_price: float = None
+
+
+class OrderStudentSchema(MongoModel):
+    id: PydanticObjectId
+    username: str
+    display_name: str
+
+
+class OrderCourseSchema(MongoModel):
+    id: PydanticObjectId
+    name: str
+
+
+class OrderDetailSchema(OrderSchema):
+    student: OrderStudentSchema
+    course: OrderCourseSchema
+
 
 class OrderCreateSchema(MongoModel):
     student: PydanticObjectId
@@ -34,5 +58,6 @@ class OrderPaymentSchema(BaseModel):
     paid_comment: str = "No comment"
     paid_price: float = None
 
-class OrderListSchema(MongoListModel):
-    __root__: List[OrderSchema]
+
+class OrderListSchema(PaginatedModel):
+    items: List[OrderDetailSchema]

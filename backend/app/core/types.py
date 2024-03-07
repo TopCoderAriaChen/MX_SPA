@@ -1,10 +1,11 @@
+from typing import Any, Optional
+
 from bson import ObjectId
 from flask_mongoengine import Document
 from mongoengine.base.datastructures import BaseList, LazyReference
-from typing import Any
 from pydantic import BaseModel
 from pydantic.main import ModelMetaclass
-from typing import Optional
+
 
 class PydanticObjectId(str):
     @classmethod
@@ -27,11 +28,11 @@ class PydanticObjectId(str):
 
 class MongoModel(BaseModel):
     @classmethod
-    def _get_value(cls, v:Any, to_dict: bool, **kwargs: Any) -> Any:
+    def _get_value(cls, v: Any, to_dict: bool, **kwargs: Any) -> Any:
         if to_dict and type(v) is BaseList:
             return list(v)
         return super()._get_value(v, to_dict=to_dict, **kwargs)
-    
+
     class Config:
         orm_mode = True
 
@@ -39,6 +40,13 @@ class MongoModel(BaseModel):
 class MongoListModel(MongoModel):
     def dict(self, *args, **kwargs):
         return super().dict(*args, **kwargs)["__root__"]
+
+
+class PaginatedModel(MongoModel):
+    total: int
+    page: int
+    pages: int
+    limit: int
 
 
 class AllOptional(ModelMetaclass):
