@@ -1,25 +1,42 @@
 import datetime
-from app.campus.model import Campus
-from flask_restx import Namespace, Resource
-from flask import request, jsonify
-from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, current_user
+
+from flask import jsonify, request
+from flask_jwt_extended import (
+    create_access_token,
+    current_user,
+    jwt_required,
+    set_access_cookies,
+)
 from flask_pydantic import validate
+from flask_restx import Namespace, Resource
 
-from .model import Admin, Student, Teacher, User, check_password, get_hashed_password
-from .schema import AdminCreateSchema, AdminListSchema, AdminSchema, StudentCreateSchema, StudentListSchema, StudentSchema, TeacherCreateSchema, TeacherListSchema, TeacherSchema, UserSchema, UserListSchema
-from .service import unauthorized_user_service, user_service
-from . import permission_required
+from app.campus.model import Campus
+from app.user import permission_required
+from app.user.service import unauthorized_user_service, user_service
 
+from .model import Admin, Student, Teacher, User, check_password
+from .schema import (
+    AdminCreateSchema,
+    AdminListSchema,
+    AdminSchema,
+    StudentCreateSchema,
+    StudentListSchema,
+    StudentSchema,
+    TeacherCreateSchema,
+    TeacherListSchema,
+    TeacherSchema,
+    UserListSchema,
+    UserSchema,
+)
 
+auth_api = Namespace("auth")
 
-auth_api: Namespace = Namespace("auth")
 
 @auth_api.route("")
 class UserAuthInfo(Resource):
     @jwt_required()
     def get(self):
         return current_user.to_dict()
-
 
 
 @auth_api.route("/login")
@@ -38,15 +55,15 @@ class Login(Resource):
             return {"code": 401, "message": "Username or Password is incorrect"}, 401
 
         jwt_token = create_access_token(
-            identity = str(user.id), expires_delta = datetime.timedelta(days=30)
+            identity=str(user.id), expires_delta=datetime.timedelta(days=30)
         )
-
-        response =  jsonify({"access_token": jwt_token})
+        response = jsonify({"access_token": jwt_token})
         set_access_cookies(response, jwt_token)
         return response
 
 
 users_api = Namespace("users")
+
 
 @users_api.route("")
 class UsersApi(Resource):
@@ -57,7 +74,7 @@ class UsersApi(Resource):
         if campus is not None:
             campus = Campus.objects(id=campus).first_or_404("Campus not found")
 
-        user_list = user_service().list_users(user_type=user_type, campus=campus)  
+        user_list = user_service().list_users(user_type=user_type, campus=campus)
         if user_type == "admin":
             return AdminListSchema.from_orm(user_list)
         if user_type == "teacher":
@@ -72,12 +89,12 @@ class UsersApi(Resource):
 class UserApi(Resource):
     @jwt_required()
     def get(self, username):
-        return UserSchema.from_orm(user_service().get_user(username=username)), 200
-    
+        return user_service().get_user(username=username).to_dict(), 200
+
     @jwt_required()
     def put(self, username):
         user_service().update_user(username, **request.json)
-        return 
+        return
 
     @jwt_required()
     def delete(self, username):
@@ -85,10 +102,10 @@ class UserApi(Resource):
         return
 
 
-
 students_api = Namespace("students")
 
-@students_api.route("")  
+
+@students_api.route("")
 class StudentsApi(Resource):
     def post(self):
         request_data = request.json
@@ -97,13 +114,14 @@ class StudentsApi(Resource):
         request_data["campus"] = Campus.objects(id=request_data["campus"]).first_or_404(
             "Campus not found"
         )
-        student = StudentCreateSchema(**request_data)        
+        student = StudentCreateSchema(**request_data)
         student = Student(**student.dict())
         student = unauthorized_user_service().register_user(student)
-        return StudentSchema.from_orm(student),201 
+        return StudentSchema.from_orm(student), 201
 
 
 admins_api = Namespace("admins")
+
 
 @admins_api.route("")
 class AdminApi(Resource):
@@ -123,6 +141,7 @@ class AdminApi(Resource):
 
 teachers_api = Namespace("teachers")
 
+
 @teachers_api.route("")
 class TeacherApi(Resource):
     @permission_required("sys_owner")
@@ -133,7 +152,7 @@ class TeacherApi(Resource):
         request_data["campus"] = Campus.objects(id=request_data["campus"]).first_or_404(
             "Campus not found"
         )
-        teacher_schema = TeacherCreateSchema(**request_data)
-        teacher = Teacher(**teacher_schema.dict())
+        teacher = TeacherCreateSchema(**request_data)
+        teacher = Teacher(**teacher.dict())
         teacher = user_service().register_user(teacher)
         return TeacherSchema.from_orm(teacher), 201

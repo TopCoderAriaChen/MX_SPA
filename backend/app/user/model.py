@@ -18,11 +18,13 @@ from app.user.schema import (
     UserSchema,
 )
 
+
 def get_hashed_password(plain_text_password):
     return bcrypt.hashpw(
         base64.b64encode(hashlib.sha256(plain_text_password.encode("utf-8")).digest()),
         bcrypt.gensalt(),
     ).decode("utf-8")
+
 
 def check_password(plain_text_password, hashed_password):
     return bcrypt.checkpw(
@@ -37,15 +39,15 @@ class User(Document):
     display_name = StringField()
     telephone = StringField()
     campus = ReferenceField(Campus, reverse_delete_rule=CASCADE)
-    created_at = DateTimeField(default = datetime.utcnow())
+    created_at = DateTimeField(default=datetime.utcnow())
     meta = {
-        "allow_inheritance":True, 
+        "allow_inheritance": True,
         "indexes": ["username", "campus"],
     }
 
     def to_dict(self):
         return UserSchema.from_orm(self).dict()
-    
+
     def update_from_dict(self, **kwargs):
         if len(kwargs) == 0:
             return
@@ -60,10 +62,10 @@ class Student(User):
 
     def to_dict(self):
         return StudentSchema.from_orm(self).dict()
-    
+
     def update_from_dict(self, **kwargs):
         if len(kwargs) == 0:
-            return        
+            return
         user = StudentPutSchema(**kwargs)
         self.update(**user.dict(exclude_defaults=True, exclude_none=True))
 
@@ -73,7 +75,7 @@ class Admin(User):
 
     def to_dict(self):
         return AdminSchema.from_orm(self).dict()
-    
+
     def update_from_dict(self, **kwargs):
         if len(kwargs) == 0:
             return
@@ -82,11 +84,11 @@ class Admin(User):
 
 
 class Teacher(User):
-    abn = StringField(max_length=20)
+    abn = StringField(max_length=20, required=False)
 
     def to_dict(self):
         return TeacherSchema.from_orm(self).dict()
-    
+
     def update_from_dict(self, **kwargs):
         if len(kwargs) == 0:
             return
