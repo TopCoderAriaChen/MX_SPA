@@ -4,17 +4,15 @@ import type { MessageApiInjection } from "naive-ui/es/message/src/MessageProvide
 import router from "@/router";
 import { useAuthStore } from "@/stores/auth";
 
-
 interface Headers extends AxiosRequestHeaders {
   "X-CSRF-TOKEN": string;
 }
-
 const CSRF_ACCESS_TOKEN = "csrf_access_token";
 const cookies = useCookies([CSRF_ACCESS_TOKEN]);
 
 const axiosInstance = axios.create({
   timeout: 5000,
-  baseURL: import.meta.env.VITE_API_BASE
+  baseURL: import.meta.env.VITE_API_BASE,
 });
 
 axiosInstance.interceptors.request.use((config) => {
@@ -22,7 +20,7 @@ axiosInstance.interceptors.request.use((config) => {
   const token = cookies.get<String>(CSRF_ACCESS_TOKEN);
   config.headers = {
     ...config.headers,
-    "X-CSRF-TOKEN": token
+    "X-CSRF-TOKEN": token,
   } as Headers;
   return config;
 });
@@ -41,21 +39,20 @@ axiosInstance.interceptors.response.use(
             authStore.logout();
             router.replace({
               path: "/login",
-              query: { redirect: router.currentRoute.value.fullPath },
+              query: {
+                redirect: router.currentRoute.value.fullPath,
+              },
             });
           } else {
             message.error(error.response.data["message"] || "Unauthorized");
           }
           break;
         default:
-          message.error(error.response.data.message || "Unknown Error");
+          message.error(error.response.data.message || "Unkown Error");
       }
     }
     return Promise.reject(error);
   }
 );
-
-
-
 
 export default axiosInstance;

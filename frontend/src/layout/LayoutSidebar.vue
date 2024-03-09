@@ -85,7 +85,7 @@ const menuOptions = computed(() => renderMenu(menus.value));
     <router-link to="/" custom #="{ navigate, href }">
       <n-a class="logo" :href="href" @click="navigate">
         <img src="@/assets/logo.jpg" />
-        <span>ShangxueOnline</span>
+        <span>MoxueOnline</span>
       </n-a>
     </router-link>
     <n-menu

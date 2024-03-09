@@ -7,7 +7,7 @@ import {
   NForm,
   NFormItem,
   NInput,
-  NA
+  NA,
 } from "naive-ui";
 import { computed, ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
@@ -17,11 +17,10 @@ interface LoginForm {
   username: string;
   password: string;
 }
-
 const formRef = ref<LoginForm | null>(null);
 const formValue = ref<LoginForm>({
   username: "admin",
-  password: "password"
+  password: "password",
 });
 
 const router = useRouter();
@@ -30,7 +29,6 @@ const loading = ref(false);
 const disabled = computed(
   () => formValue.value.username === "" || formValue.value.password === ""
 );
-
 const handleLogin = async () => {
   try {
     loading.value = true;
@@ -64,9 +62,9 @@ const handleLogin = async () => {
         </n-form-item>
       </n-form>
       <n-space align="center" justify="space-between">
-        <n-a href="/forget">Forget your password?</n-a>
+        <n-a href="/forget"> Forget your password? </n-a>
         <n-space>
-          <n-button tag="a" size="large" href="/register">Register</n-button>
+          <n-button tag="a" size="large" href="/register"> Register </n-button>
           <n-button
             type="primary"
             tag="a"
@@ -91,7 +89,6 @@ const handleLogin = async () => {
   justify-content: flex-end;
   align-items: center;
 }
-
 .login-card {
   margin-right: 15vw;
 }

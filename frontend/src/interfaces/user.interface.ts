@@ -1,19 +1,20 @@
+import type { CourseBasicInfo } from "@/api/course";
+
 export interface User {
-  username: String;
-  password: String | null;
-  display_name: String;
-  telephone: String;
-  campus: String;
-  created_at: String;
-  wx?: String;
-  uni?: String;
-  permissions?: [String];
-  user_type: String;
-  abn?: String;
-  enrolled_courses?:[
-    {
-      course_id: String;
-      course_name: String;
-    }
-  ]
+  id: string;
+  username: string;
+  password: string | null;
+  display_name: string;
+  telephone: string;
+  campus: {
+    id: string;
+    name: string;
+  };
+  created_at: string;
+  wx?: string;
+  uni?: string;
+  permissions?: [string];
+  user_type: string;
+  abn?: string;
+  enrolled_courses?: CourseBasicInfo[];
 }

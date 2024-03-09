@@ -81,7 +81,7 @@ router.beforeEach((to) => {
 });
 
 router.afterEach((to) => {
-  document.title = to.meta.title || to.name?.toString() || "ShangxueOnline";
+  document.title = to.meta.title || to.name?.toString() || "MoxueOnline";
 });
 
 export default router;

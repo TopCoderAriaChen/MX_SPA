@@ -5,3 +5,4 @@ docker
 logs
 .env.prod
 .DS_Store
+app/.DS_Store
