@@ -3,7 +3,25 @@ from datetime import datetime
 from typing import List
 from uuid import UUID
 
+from pydantic import validator
+
+from app.core.storage import generate_s3_signed_url
 from app.core.types import AllOptional, MongoListModel, MongoModel, PydanticObjectId
+
+
+class LectureAttachmentSchema(MongoModel):
+    name: str
+    type: str
+    filename: str
+    signed_url: str
+
+    @validator("signed_url")
+    def generate_signed_url(cls, v):
+        return generate_s3_signed_url(v)
+
+    class Config:
+        orm_mode = True
+        fields = {"signed_url": "bucket_url"}
 
 
 class LectureSchema(MongoModel):
@@ -12,6 +30,8 @@ class LectureSchema(MongoModel):
     streaming_url: str
     recording_url: str
     scheduled_at: datetime
+    attachments: List[LectureAttachmentSchema]
+
 
 class LectureCreateSchema(LectureSchema):
     id: UUID = None
@@ -51,8 +71,6 @@ class CourseDetailSchema(MongoModel):
     enrolled_students: List[CourseEnrolledStudentsSchema]
 
 
-
-
 class CourseCreateSchema(MongoModel):
     name: str
     uni_course_code: str
@@ -80,8 +98,8 @@ class CourseBasicInfoSchema(MongoModel):
     name: str
     uni_course_code: str
     description: str
-    teacher: PydanticObjectId
-    campus: PydanticObjectId
+    teacher: CourseTeacherInfoSchema
+    campus: CourseCampusInfoSchema
     created_time: datetime
     publish_time: datetime
     original_price: float
