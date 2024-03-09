@@ -75,8 +75,13 @@ const uploadRequest = async ({
 const scheduled_at = computed(() => new Date(props.lecture.scheduled_at + "Z"));
 
 const handleDelete = async () => {
-  await deleteLecture(props.course_id, props.lecture.id);
-  props.onUpdate();
+  try {
+    await deleteLecture(props.course_id, props.lecture.id);
+    message.success("Lecture deleted successfully.");
+    props.onUpdate();
+  } catch (error) {
+      message.error("Failed to delete attachment.");
+  }
 };
 
 const handleDeleteAttachment = async (attachmentName: string) => {

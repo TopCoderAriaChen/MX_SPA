@@ -67,6 +67,7 @@ export interface CreateLectureData {
   streaming_url: string;
   recording_url: string;
   scheduled_at: string;
+  attachments: LectureAttachment[];
 }
 
 export const useCourse = (course_id: string) =>
