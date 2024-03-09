@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-import { deleteLecture, uploadAttachment, type Lecture } from "@/api/course";
+import {
+  deleteLecture,
+  uploadAttachment,
+  deleteAttachment,
+  type Lecture,
+} from "@/api/course";
 import { computed, defineProps, ref } from "vue";
 import {
   NCard,
@@ -26,7 +31,7 @@ import {
   DocumentAttach,
   Videocam,
 } from "@vicons/ionicons5";
-import { Delete } from "@vicons/carbon";
+import { Delete, CloseFilled } from "@vicons/carbon";
 
 const props = defineProps<{
   lecture: Lecture;
@@ -73,6 +78,16 @@ const handleDelete = async () => {
   await deleteLecture(props.course_id, props.lecture.id);
   props.onUpdate();
 };
+
+const handleDeleteAttachment = async (attachmentName: string) => {
+  try {
+    await deleteAttachment(props.course_id, props.lecture.id, attachmentName);
+    message.success("Attachment deleted successfully.");
+    props.onUpdate();
+  } catch (error) {
+    message.error("Failed to delete attachment.");
+  }
+};
 </script>
 <template>
   <n-card>
@@ -115,8 +130,24 @@ const handleDelete = async () => {
           >
             <template #icon>
               <n-icon :component="DocumentAttach"></n-icon>
+              <n-a :href="attachment.signed_url">{{ attachment.name }}</n-a>
             </template>
-            <n-a :href="attachment.signed_url">{{ attachment.name }}</n-a>
+            <n-popconfirm
+              @positive-click="() => handleDeleteAttachment(attachment.name)"
+            >
+              <template #trigger>
+                <n-button
+                  quaternary
+                  type="error"
+                  style="padding: 5px; height: 20px"
+                >
+                  <template #icon>
+                    <n-icon size="15"><CloseFilled /></n-icon>
+                  </template>
+                </n-button>
+              </template>
+              Are you sure you want to delete this attachment?
+            </n-popconfirm>
           </n-tag>
           <n-tag
             v-if="isAdmin"

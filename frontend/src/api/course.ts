@@ -74,6 +74,7 @@ export const useCourse = (course_id: string) =>
 
 export const useCourseList = () =>
   useAxios<CourseBasicInfo[]>(`/courses`, axios);
+
 export const deleteLecture = async (course_id: string, lecture_id: string) =>
   await axios.delete(`/courses/${course_id}/lectures/${lecture_id}`);
 
@@ -106,3 +107,9 @@ export const uploadAttachment = async (
   );
   return reposne.data;
 };
+
+export const deleteAttachment = async (
+  courseId: string,
+  lectureId: string,
+  fileName: string
+) => await axios.delete(`/courses/${courseId}/lectures/${lectureId}/attachments/${fileName}`);
