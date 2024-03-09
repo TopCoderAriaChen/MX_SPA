@@ -1,11 +1,12 @@
-from datetime import datetime
+import json
 import logging
 import os
 import uuid
-import json
+from datetime import datetime
 
 from flask import Flask, request
-from pythonjsonlogger import jsonlogger 
+from pythonjsonlogger import jsonlogger
+
 
 class Correlation:
     def __init__(self):
@@ -13,17 +14,18 @@ class Correlation:
         self.timestamp = datetime.utcnow()
 
     def to_dict(self):
-        return{
-            "correlationId":str(self.id),
-            "correlationTimestamp":self.timestamp.isoformat(),
+        return {
+            "correlationId": str(self.id),
+            "correlationTimestamp": self.timestamp.isoformat(),
         }
-    
+
     def get_duration_in_seconds(self):
-        elapsed = datetime.utcnow() - self.timestamp
-        return round(elapsed.microseconds / 1000 / 1000, 3)
-    
+        elpased = datetime.utcnow() - self.timestamp
+        return round(elpased.microseconds / 1000 / 1000, 3)
+
+
 class CorrelationLogger:
-    def __init__(self, logger, correlation):
+    def __init__(self, logger, correlation) -> None:
         self.logger = logger
         self.base = correlation
 
@@ -56,7 +58,7 @@ def config_log(app: Flask):
     json_formatter = jsonlogger.JsonFormatter(
         "%(asctime)s %(levelname)s %(module)s %(message)s"
     )
-    file_handler.setFormatter(json_formatter) 
+    file_handler.setFormatter(json_formatter)
     app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.DEBUG)
 
@@ -64,17 +66,15 @@ def config_log(app: Flask):
     @app.before_request
     def before_request():
         request.correlation = Correlation()
-        request.logger = CorrelationLogger(
-            app.logger, request.correlation.to_dict()
-        )
+        request.logger = CorrelationLogger(app.logger, request.correlation.to_dict())
         extra = {
             "x-request-id": request.headers.get("x-request-id"),
             "method": request.method,
             "path": request.path,
             "querys": json.dumps(request.args),
         }
-        request.logger.info("request", extra)  
-    
+        request.logger.info("request", extra)
+
     @app.after_request
     def after_request(response):
         extra = {

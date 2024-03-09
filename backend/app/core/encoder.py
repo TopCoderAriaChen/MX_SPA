@@ -4,6 +4,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, SecretStr
 
+
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime.datetime):

@@ -42,5 +42,4 @@ def register_resources_exception_handler(api):
     @api.errorhandler(Exception)
     def handle_default_exception(e: Exception):
         request.logger.error(str(e))
-        return {"code": 500, "message": "Internal server error"}, 500
         return {"code": 500, "message": "Internal server errror"}, 500
