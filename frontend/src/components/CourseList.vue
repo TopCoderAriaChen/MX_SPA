@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { CourseBasicInfo } from "@/api/course";
 import NewCourseButton from "@/components/course/NewCourseButton.vue";
+import UpdateCourseButton from "./course/UpdateCourseButton.vue";
 import { createOrder } from "@/api/order";
 import { deleteCource } from "@/api/course";
 import type { User } from "@/interfaces/user.interface";
@@ -24,6 +25,7 @@ import { useRouter } from "vue-router";
 const props = defineProps<{
   userInfo: User;
   courses: CourseBasicInfo[];
+  onUpdated: () => void;
 }>();
 const router = useRouter();
 const authStore = useAuthStore();
@@ -69,10 +71,17 @@ const purchase = async () => {
 const handleDeleteCourse = async (course_id: string) => {
   const response = await deleteCource(course_id);
   message.success(`Course deleted.`);
+  props.onUpdated();
 };
 
 const onCourseCreated = () => {
   console.log("created");
+  props.onUpdated();
+};
+
+const onCourseUpdated = () => {
+  console.log("updated");
+  props.onUpdated();
 };
 </script>
 
@@ -113,6 +122,7 @@ const onCourseCreated = () => {
             </span>
           </n-space>
           <n-space class="h-8" v-if="hasPermission('course_admin')">
+            <update-course-button :course_id="course.id" :on-updated="onCourseUpdated"></update-course-button>
             <n-popconfirm @positive-click="() => handleDeleteCourse(course.id)">
               <template #trigger>
                 <n-button size="small" type="error">Delete</n-button>
