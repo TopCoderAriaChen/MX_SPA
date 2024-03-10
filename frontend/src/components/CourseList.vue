@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CourseBasicInfo } from "@/api/course";
+import NewCourseButton from '@/components/course/NewCourseButton.vue';
 import { createOrder } from "@/api/order";
 import type { User } from "@/interfaces/user.interface";
 import { useAuthStore } from "@/stores/auth";
@@ -13,6 +14,7 @@ import {
   NButton,
   NModal,
   useMessage,
+  NDivider,
 } from "naive-ui";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
@@ -24,6 +26,8 @@ const props = defineProps<{
 const router = useRouter();
 const authStore = useAuthStore();
 
+const { hasPermission } = useAuthStore();
+
 const message = useMessage();
 
 const showPurchaseModal = ref(false);
@@ -34,7 +38,8 @@ const isEnrolledCourse = (course_id: string) => {
     return true;
   } else {
     return props.userInfo?.enrolled_courses
-      ?.map((c) => c.id)
+      ?.map((c) => c.course_id
+      )
       .includes(course_id);
   }
 };
@@ -53,9 +58,16 @@ const clickPurchase = (course_id: string) => {
 };
 
 const purchase = async () => {
-  const orderId = await createOrder(clickedCourse.value, authStore.getUserInfo?.id!);
+  const orderId = await createOrder(
+    clickedCourse.value,
+    authStore.getUserInfo?.id!
+  );
   message.success(`Course ordered. Order ID: ${orderId}`);
 };
+
+const onCourseCreated=()=>{
+  console.log("created")
+}
 </script>
 
 <template>
@@ -100,6 +112,10 @@ const purchase = async () => {
       </n-card>
     </n-grid-item>
   </n-grid>
+  <n-divider v-if="hasPermission('course_admin')">
+    <new-course-button :on-created="onCourseCreated"></new-course-button>
+  </n-divider>
+
   <n-modal
     v-model:show="showPurchaseModal"
     preset="dialog"
