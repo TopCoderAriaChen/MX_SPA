@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { CourseBasicInfo } from "@/api/course";
-import NewCourseButton from '@/components/course/NewCourseButton.vue';
+import NewCourseButton from "@/components/course/NewCourseButton.vue";
 import { createOrder } from "@/api/order";
+import { deleteCource } from "@/api/course";
 import type { User } from "@/interfaces/user.interface";
 import { useAuthStore } from "@/stores/auth";
 import {
@@ -15,6 +16,7 @@ import {
   NModal,
   useMessage,
   NDivider,
+  NPopconfirm,
 } from "naive-ui";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
@@ -38,8 +40,7 @@ const isEnrolledCourse = (course_id: string) => {
     return true;
   } else {
     return props.userInfo?.enrolled_courses
-      ?.map((c) => c.course_id
-      )
+      ?.map((c) => c.course_id)
       .includes(course_id);
   }
 };
@@ -65,9 +66,14 @@ const purchase = async () => {
   message.success(`Course ordered. Order ID: ${orderId}`);
 };
 
-const onCourseCreated=()=>{
-  console.log("created")
-}
+const handleDeleteCourse = async (course_id: string) => {
+  const response = await deleteCource(course_id);
+  message.success(`Course deleted.`);
+};
+
+const onCourseCreated = () => {
+  console.log("created");
+};
 </script>
 
 <template>
@@ -105,6 +111,14 @@ const onCourseCreated=()=>{
             >
               Enrolled
             </span>
+          </n-space>
+          <n-space class="h-8" v-if="hasPermission('course_admin')">
+            <n-popconfirm @positive-click="() => handleDeleteCourse(course.id)">
+              <template #trigger>
+                <n-button size="small" type="error">Delete</n-button>
+              </template>
+              Do you want to confirm the deletion?
+            </n-popconfirm>
           </n-space>
         </template>
         <n-p class="mt-1"> Teacher: {{ course.teacher.display_name }} </n-p>
