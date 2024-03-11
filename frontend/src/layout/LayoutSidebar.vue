@@ -2,7 +2,7 @@
 import { NIcon, NLayoutSider, NMenu, NA } from "naive-ui";
 import { ref, h, computed, watchEffect } from "vue";
 import { useRoute, RouterLink } from "vue-router";
-import { Book, Cart, Grid, Home } from "@vicons/ionicons5";
+import { Book, Cart, Grid, Home ,People} from "@vicons/ionicons5";
 import { useAuthStore } from "@/stores/auth";
 import { storeToRefs } from "pinia";
 interface MenuItem {
@@ -30,6 +30,11 @@ const menus = computed<MenuItem[]>(() => {
       key: "home",
       path: "/",
       icon: Home,
+    }, {
+      label: "Users",
+      key: "users",
+      path: "/users",
+      icon: People,
     },
     {
       label: "All Courses",

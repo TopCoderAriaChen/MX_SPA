@@ -132,8 +132,10 @@ export const deleteAttachment = async (
   courseId: string,
   lectureId: string,
   fileName: string
-) => await axios.delete(`/courses/${courseId}/lectures/${lectureId}/attachments/${fileName}`);
-
+) =>
+  await axios.delete(
+    `/courses/${courseId}/lectures/${lectureId}/attachments/${fileName}`
+  );
 
 export const createCource = async ({
   name,
@@ -145,15 +147,16 @@ export const createCource = async ({
   cover_image,
   publish_time,
 }: CreateCourceData) => {
-
-  const response = await axios.post(`/courses`, { name,
+  const response = await axios.post(`/courses`, {
+    name,
     uni_course_code,
     description,
     teacher,
     campus,
     original_price,
     cover_image,
-    publish_time,});
+    publish_time,
+  });
 
   return response.data;
 };
@@ -173,8 +176,15 @@ export const updateCourse = async ({
   // form.append("uni_course_code", uni_course_code);
   // form.append("description", description);
   // form.append("original_price", original_price);
-  const response = await axios.put(`/courses/${course_id}`, {  name,
+  const response = await axios.put(`/courses/${course_id}`, {
+    name,
     uni_course_code,
     description,
-    original_price,});
+    original_price,
+  });
+};
+
+export const getAllCourses = async () => {
+  const { data } = await axios.get("/courses");
+  return data;
 };
