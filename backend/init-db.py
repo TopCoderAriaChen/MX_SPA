@@ -1,7 +1,7 @@
 from app import create_app
 from app.campus.model import Campus
 from app.user.model import Admin, Student, Teacher, get_hashed_password
-
+from app.course.model import Course
 print("Loading...")
 
 create_app()
@@ -52,3 +52,45 @@ teacher = Teacher(
     campus=unimelb_campus,
 )
 teacher.save()
+
+course1 = Course(
+  name= "Python-Basics",
+  uni_course_code= "COMP90052",
+  description= "Python 1 tutorial",
+  teacher= teacher,
+  campus=unimelb_campus,
+  created_time= "2024-03-12T07:08:42.583000", 
+  publish_time= "2024-03-12T07:08:42.583000", 
+  original_price= "199.99",
+  cover_image= "https://files.realpython.com/media/Newbie_Watermarked.a9319218252a.jpg",
+  
+)
+course1.save()
+
+course2 = Course(
+  name= "Python-Intermediate",
+  uni_course_code= "COMP90068",
+  description= "Python 2 tutorial",
+  teacher= teacher,
+  campus=unimelb_campus,
+  created_time= "2024-03-12T07:08:42.583000", 
+  publish_time= "2024-03-12T07:08:42.583000", 
+  original_price= "199.99",
+  cover_image= "https://files.realpython.com/media/Newbie_Watermarked.a9319218252a.jpg",
+  
+)
+course2.save()
+
+course3 = Course(
+  name= "Python-Advanced",
+  uni_course_code= "COMP90086",
+  description= "Python 3 tutorial",
+  teacher= teacher,
+  campus=unimelb_campus,
+  created_time= "2024-03-12T07:08:42.583000", 
+  publish_time= "2024-03-12T07:08:42.583000", 
+  original_price= "199.99",
+  cover_image= "https://files.realpython.com/media/Newbie_Watermarked.a9319218252a.jpg",
+  
+)
+course3.save()

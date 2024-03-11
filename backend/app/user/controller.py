@@ -71,10 +71,12 @@ class UsersApi(Resource):
     def get(self):
         user_type = request.args.get("type", None)
         campus = request.args.get("campus", None)
+
         if campus is not None:
             campus = Campus.objects(id=campus).first_or_404("Campus not found")
 
-        user_list = user_service().list_users(user_type=user_type, campus=campus)
+        user_list = user_service().list_users(user_type, campus)
+
         if user_type == "admin":
             return AdminListSchema.from_orm(user_list)
         if user_type == "teacher":
