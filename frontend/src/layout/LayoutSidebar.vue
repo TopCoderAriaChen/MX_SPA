@@ -2,7 +2,7 @@
 import { NIcon, NLayoutSider, NMenu, NA } from "naive-ui";
 import { ref, h, computed, watchEffect } from "vue";
 import { useRoute, RouterLink } from "vue-router";
-import { Book, Cart, Grid, Home ,People} from "@vicons/ionicons5";
+import { Book, Cart, Grid, Home, People } from "@vicons/ionicons5";
 import { useAuthStore } from "@/stores/auth";
 import { storeToRefs } from "pinia";
 interface MenuItem {
@@ -11,12 +11,14 @@ interface MenuItem {
   path: string;
   icon?: any;
   children?: MenuItem[];
+  permission?: Array<string>;
 }
 const route = useRoute();
 const currentKey = ref(route.fullPath.slice(1));
 const collapsed = ref(false);
 const autStore = useAuthStore();
 const auth = storeToRefs(autStore);
+const { hasPermission } = useAuthStore();
 
 watchEffect(() => {
   if (route.fullPath !== currentKey.value) {
@@ -30,11 +32,13 @@ const menus = computed<MenuItem[]>(() => {
       key: "home",
       path: "/",
       icon: Home,
-    }, {
+    },
+    {
       label: "Users",
       key: "users",
       path: "/users",
       icon: People,
+      permission: ["sys_owner", "user_admin"],
     },
     {
       label: "All Courses",
@@ -65,16 +69,29 @@ const menus = computed<MenuItem[]>(() => {
 });
 
 const renderMenu = (menus: MenuItem[]): any =>
-  menus.map((item) => ({
-    label: () =>
-      h(RouterLink, { to: { path: item.path } }, { default: () => item.label }),
-    key: item.key,
-    icon:
-      item.icon != null
-        ? () => h(NIcon, null, { default: () => h(item.icon) })
-        : undefined,
-    children: item.children ? renderMenu(item.children) : undefined,
-  }));
+  menus
+    .map((item) => {
+      if (item.permission && item.permission.length > 0) {
+        if (!item.permission.some((p) => hasPermission(p))) {
+          return null;
+        }
+      }
+      return {
+        label: () =>
+          h(
+            RouterLink,
+            { to: { path: item.path } },
+            { default: () => item.label }
+          ),
+        key: item.key,
+        icon:
+          item.icon != null
+            ? () => h(NIcon, null, { default: () => h(item.icon) })
+            : undefined,
+        children: item.children ? renderMenu(item.children) : undefined,
+      };
+    })
+    .filter((i) => i);
 
 const menuOptions = computed(() => renderMenu(menus.value));
 </script>

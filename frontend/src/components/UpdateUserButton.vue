@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import {
-  
   updateUser,
   getUser,
   USER_TYPE,
@@ -17,12 +16,12 @@ import {
   NDatePicker,
   NInput,
   NSpace,
-  NInputNumber,
+  NTag,
   NSelect,
   NRadioGroup,
   NRadioButton,
-messageDark,
-useMessage,
+  messageDark,
+  useMessage,
 } from "naive-ui";
 import { reactive, ref } from "vue";
 
@@ -138,7 +137,10 @@ const Permission = [
         label-width="auto"
       >
         <n-form-item label="User Type" path="user_type">
-          <n-radio-group :disabled="true" v-model:value="updateUserForm.user_type">
+          <n-radio-group
+            :disabled="true"
+            v-model:value="updateUserForm.user_type"
+          >
             <n-radio-button
               v-for="role in UserTypes"
               :key="role.value"
@@ -148,7 +150,10 @@ const Permission = [
           </n-radio-group>
         </n-form-item>
         <n-form-item label="User Name" path="username">
-          <n-input :disabled="true" v-model:value="updateUserForm.username"></n-input>
+          <n-input
+            :disabled="true"
+            v-model:value="updateUserForm.username"
+          ></n-input>
         </n-form-item>
         <n-form-item label="Password" path="password">
           <n-input
@@ -196,12 +201,22 @@ const Permission = [
           label="Enrolled Courses"
           path="enrolled_courses"
         >
-          <n-select
+          <!-- <n-select
             :options="state.courseOptions"
             multiple
             :disabled="true"
             v-model:value="updateUserForm.enrolled_courses"
-          ></n-select>
+          ></n-select> -->
+          <n-space>
+            <n-tag
+              v-for="course in state.courseOptions"
+              :key="course"
+              type="info"
+              style="margin-bottom: 8px"
+              >{{ course.label }}
+              </n-tag
+            >
+          </n-space>
         </n-form-item>
         <n-form-item
           v-show="updateUserForm.user_type === USER_TYPE.ADMIN"
@@ -217,7 +232,9 @@ const Permission = [
       </n-form>
       <template #footer>
         <n-space justify="end">
-          <n-button type="primary" @click="updateNewUser">Check&Update</n-button>
+          <n-button type="primary" @click="updateNewUser"
+            >Check&Update</n-button
+          >
           <n-button @click="closeModal">Cancel</n-button>
         </n-space>
       </template>
