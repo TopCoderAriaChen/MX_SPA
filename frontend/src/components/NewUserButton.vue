@@ -15,11 +15,12 @@ import {
   NSelect,
   NRadioGroup,
   NRadioButton,
+useMessage,
 } from "naive-ui";
 import { reactive, ref } from "vue";
 
 const state = reactive({ courseOptions: [], campusOptions: [] });
-
+const message = useMessage();
 const newUserFormRef = ref(null);
 const defaultData = {
   username: "",
@@ -58,6 +59,7 @@ const createNewUser = async () => {
     ...newUserForm.value,
   });
   newUserForm.value = defaultData;
+  message.success("User updated");
   showNewUserModal.value = false;
   props.onCreated();
 };
@@ -169,7 +171,7 @@ const Permission = [
           <n-input v-model:value="newUserForm.abn"></n-input>
         </n-form-item>
 
-        <n-form-item
+        <!-- <n-form-item
           v-show="newUserForm.user_type === USER_TYPE.STUDENT"
           label="Enrolled Courses"
           path="enrolled_courses"
@@ -179,7 +181,7 @@ const Permission = [
             multiple
             v-model:value="newUserForm.enrolled_courses"
           ></n-select>
-        </n-form-item>
+        </n-form-item> -->
         <n-form-item
           v-show="newUserForm.user_type === USER_TYPE.ADMIN"
           label="Permission"

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {
-  createUser,
+  
+  updateUser,
   getUser,
   USER_TYPE,
   type CreateUserData,
@@ -20,11 +21,13 @@ import {
   NSelect,
   NRadioGroup,
   NRadioButton,
+messageDark,
+useMessage,
 } from "naive-ui";
 import { reactive, ref } from "vue";
 
 const state = reactive({ courseOptions: [], campusOptions: [] });
-
+const message = useMessage();
 const updateUserFormRef = ref(null);
 const defaultData = {
   username: "",
@@ -67,12 +70,13 @@ const handleOpenUpdateUserModal = async () => {
   showUpdateUserModal.value = true;
 };
 
-const createNewUser = async () => {
-  await createUser(updateUserForm.value.user_type, {
+const updateNewUser = async () => {
+  await updateUser(updateUserForm.value.username, {
     ...updateUserForm.value,
   });
   updateUserForm.value = defaultData;
   showUpdateUserModal.value = false;
+  message.success("User updated");
   props.onCreated();
 };
 
@@ -118,7 +122,7 @@ const Permission = [
     style="margin-right: 8px"
     type="success"
     @click="handleOpenUpdateUserModal"
-    >Update</n-button
+    >Check&Update</n-button
   >
   <n-modal v-model:show="showUpdateUserModal">
     <n-card
@@ -134,7 +138,7 @@ const Permission = [
         label-width="auto"
       >
         <n-form-item label="User Type" path="user_type">
-          <n-radio-group v-model:value="updateUserForm.user_type">
+          <n-radio-group :disabled="true" v-model:value="updateUserForm.user_type">
             <n-radio-button
               v-for="role in UserTypes"
               :key="role.value"
@@ -144,7 +148,7 @@ const Permission = [
           </n-radio-group>
         </n-form-item>
         <n-form-item label="User Name" path="username">
-          <n-input v-model:value="updateUserForm.username"></n-input>
+          <n-input :disabled="true" v-model:value="updateUserForm.username"></n-input>
         </n-form-item>
         <n-form-item label="Password" path="password">
           <n-input
@@ -195,6 +199,7 @@ const Permission = [
           <n-select
             :options="state.courseOptions"
             multiple
+            :disabled="true"
             v-model:value="updateUserForm.enrolled_courses"
           ></n-select>
         </n-form-item>
@@ -212,7 +217,7 @@ const Permission = [
       </n-form>
       <template #footer>
         <n-space justify="end">
-          <n-button type="primary" @click="createNewUser">Create</n-button>
+          <n-button type="primary" @click="updateNewUser">Check&Update</n-button>
           <n-button @click="closeModal">Cancel</n-button>
         </n-space>
       </template>

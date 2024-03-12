@@ -4,6 +4,7 @@ import axios from "../utils/http";
 import { useAxios } from "@vueuse/integrations/useAxios";
 
 export interface CreateUserData {
+  id?:string;
   username: string;
   password: string;
   display_name: string;
@@ -69,8 +70,15 @@ export const deleteUser = async ({ username }: { username: String }) => {
   return response.data;
 };
 
-export const UpdateUser = async (username: string, data: CreateUserData) => {
-  const response = await axios.post(`/users/${username}`, data);
+export const updateUser = async (username: string, data: any) => {
+  delete data.username;
+  delete data.id;
+  delete data.created_at;
+  if(!data.password){
+    delete data.password;
+  
+  }
+  const response = await axios.put(`/users/${username}`, data);
   return response.data;
 };
 
