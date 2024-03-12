@@ -9,34 +9,40 @@ create_app()
 print("Configuring database")
 Campus.objects().delete()
 
-unimelb_campus = Campus(name="unimelb")
+unimelb_campus = Campus(name="University of Melbourne")
+monash_campus = Campus(name="Monash University")
+deakin_campus = Campus(name="RMIT University")
+swinburne_campus = Campus(name="Swinburne University of Technology")
 unimelb_campus.save()
+monash_campus.save()
+deakin_campus.save()
+swinburne_campus.save()
 
 admin = Admin(
     username="admin",
     display_name="Admin",
     password=get_hashed_password("password"),
-    telephone="123",
+    telephone="0414639683",
     permissions=["sys_owner", "campus_admin", "course_admin", "user_admin","order_admin", "lecture_admin"],
     campus=unimelb_campus,
 )
 admin.save()
 
 support = Admin(
-    username="support",
+    username="support_1",
     display_name="Support A",
     password=get_hashed_password("password"),
-    telephone="123",
+    telephone="0414357395",
     permissions=["course_admin", "user_admin","order_admin", "lecture_admin"],
     campus=unimelb_campus,
 )
 support.save()
 
 student = Student(
-    username="student",
+    username="student_1",
     display_name="John Smith",
     password=get_hashed_password("password"),
-    telephone="124",
+    telephone="04147343952",
     wx="wx123",
     uni="Unimelb",
     campus=unimelb_campus,
@@ -45,9 +51,9 @@ student.save()
 
 teacher = Teacher(
     username="teacher_1",
-    display_name="Harmanpreet Singh",
+    display_name="Michael Smith",
     password=get_hashed_password("password"),
-    telephone="124",
+    telephone="0414239943",
     abn="123123124124512",
     campus=unimelb_campus,
 )
