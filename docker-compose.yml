@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  backend:
+    image: 033234543621.dkr.ecr.ap-southeast-2.amazonaws.com/mx-app-backend
+    restart: always
+    env_file: backend/.env.prod
+    build: backend
+    platform: "linux/amd64"
+    command: gunicorn --worker-class gevent --workers 2 --bind 0.0.0.0:3000 wsgi:app --log-level debug
+    x-aws-policies:
+      - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+    ports:
+      - target: 3000
+        published: 3000
+        x-aws-protocol: http
+
+  
+  frontend:
+    image: 033234543621.dkr.ecr.ap-southeast-2.amazonaws.com/mx-app-frontend
+    restart: always
+    platform: "linux/amd64"
+    build: frontend
+    ports:
+      - target: 80
+        published: 80
+        x-aws-protocol: http
+
+x-aws-cloudformation:
+  Resources:
+    Backend3000TargetGroup:
+      Properties:
+        HealthCheckPath: /api/v1/campus
+        Matcher: 
+          HttpCode: 200-499
+    BackendAPIRule:
+      Type: AWS::ElasticLoadBalancingV2::ListenerRule
+      Properties:
+        Actions:
+        - TargetGroupArn:
+            Ref: Backend3000TargetGroup
+          Type: forward
+        Conditions:
+        - Field: path-pattern
+          Values:
+          - /api/*
+        ListenerArn:
+          Ref: Frontend80Listener
+        Priority: 1
