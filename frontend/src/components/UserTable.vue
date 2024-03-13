@@ -68,11 +68,14 @@ const columns = ref([
     render: (record: User) => {
       if (hasPermission("user_admin") || hasPermission("sys_owner"))
         return (
+          // @ts-ignore
           <>
+            {/* @ts-ignore */}
             <UpdateUserButton
               username={record.username}
               onCreated={handleUpdate}
             />
+            {/* @ts-ignore */}
             <Button
               size="small"
               type="error"

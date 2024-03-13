@@ -74,9 +74,11 @@ const paymentColumn = {
   title: "Payment",
   render: (record: Order) => {
     if (record.paid) {
+      // @ts-ignore
       return <NTag type="success">Paid</NTag>;
     } else {
       return authStore.hasPermission("order_admin") ? (
+        // @ts-ignore
         <Button type="primary" size="small" onClick={() => {
             showConfirmPayment.value = true;
             clickedOrder.value = record;
@@ -85,6 +87,7 @@ const paymentColumn = {
           Pay
         </Button>
       ) : (
+        // @ts-ignore
         <NTag type="warning">Unpaid</NTag>
       );
     }

@@ -3,7 +3,8 @@ import type { AxiosProgressEvent } from "axios";
 import axios from "../utils/http";
 
 export interface CourseBasicInfo {
-  id: string;
+  id:string;
+  course_id?: string;
   name: string;
   uni_course_code: string;
   description: string;

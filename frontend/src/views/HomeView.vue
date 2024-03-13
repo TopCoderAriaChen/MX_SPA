@@ -4,7 +4,9 @@ import CoursesStatus from "../components/CoursesStatus.vue";
 import CourseList from "@/components/CourseList.vue";
 import { NGrid, NGridItem, NDivider } from "naive-ui";
 import { useAuthStore } from "@/stores/auth";
+import { useCourseList } from "@/api/course";
 const authStore = useAuthStore();
+const { data: courseList, isLoading,execute:refreshCourseList } = useCourseList();
 </script>
 
 <template>
@@ -20,5 +22,6 @@ const authStore = useAuthStore();
   <course-list
     :user-info="authStore.getUserInfo!"
     :courses="authStore.getUserInfo?.enrolled_courses || []"
+    :on-updated="refreshCourseList"
   ></course-list>
 </template>

@@ -25,7 +25,7 @@ import {
 } from "naive-ui";
 import { reactive, ref } from "vue";
 
-const state = reactive({ courseOptions: [], campusOptions: [] });
+const state = reactive<{courseOptions:Array<{label:string,value:string}>,campusOptions:Array<{label:string,value:string}>}>({ courseOptions: [], campusOptions: [] });
 const message = useMessage();
 const updateUserFormRef = ref(null);
 const defaultData = {
@@ -210,7 +210,7 @@ const Permission = [
           <n-space>
             <n-tag
               v-for="course in state.courseOptions"
-              :key="course"
+              :key="course.value"
               type="info"
               style="margin-bottom: 8px"
               >{{ course.label }}
