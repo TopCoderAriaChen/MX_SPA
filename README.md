@@ -82,7 +82,7 @@ To run this project locally:
    Begin by cloning the MX_SPA repository from GitHub to your local machine.
 
    ```shell
-   git clone git@github.com:AriaChen124/MX_SPA.git
+   git@github.com:TopCoderAriaChen/MX_SPA.git
    cd MX_SPA
    ```
 
