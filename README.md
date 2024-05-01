@@ -82,33 +82,33 @@ To run this project locally:
    Begin by cloning the MX_SPA repository from GitHub to your local machine.
 
    ```shell
-   git@github.com:TopCoderAriaChen/MX_SPA.git
-   cd MX_SPA
+   git clone git@github.com:TopCoderAriaChen/MX_SPA.git
    ```
 
-2. **Initialize Backend Environment**  
+3. **Initialize Backend Environment**  
    Navigate to the backend directory and set up your Python virtual environment.
 
    ```shell
+   cd MX_SPA
    cd backend
    source ./venv/bin/activate  # On Windows use `venv\Scripts\activate`
    ```
 
-3. **Install Python packages**
+4. **Install Python packages**
     After activating the virtual environment, install the required Python packages.
 
    ```shell
    pip install -r requirements.txt
    ```
 
-4. **Database Configuration and Initialization**  
+5. **Database Configuration and Initialization**  
    After connected with MongoDb, run the initialization script to create and seed your database with initial data.
 
    ```shell
    python init-db.py
    ```
 
-5. **Launch Backend Server**  
+6. **Launch Backend Server**  
    Start the Flask server to begin serving the backend API.
 
    ```shell
